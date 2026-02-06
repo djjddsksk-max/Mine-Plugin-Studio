@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Link } from "wouter";
+import { useState, useEffect, useRef } from "react";
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 import { 
   Code2, 
   Box, 
@@ -13,7 +12,10 @@ import {
   Terminal,
   Menu,
   X,
-  LucideIcon
+  LucideIcon,
+  Sparkles,
+  Command,
+  ShieldCheck
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,129 +32,143 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-black/80 backdrop-blur-md border-b border-white/10 py-4" : "bg-transparent py-6"}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-black/60 backdrop-blur-xl border-b border-white/10 py-3" : "bg-transparent py-6"}`}>
       <div className="container mx-auto px-6 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center transform rotate-3 shadow-[0_0_15px_rgba(57,255,20,0.5)]">
-            <Terminal className="text-black w-6 h-6" />
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="flex items-center gap-3 group cursor-pointer"
+        >
+          <div className="relative">
+            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center transform rotate-3 shadow-[0_0_15px_rgba(57,255,20,0.5)] group-hover:rotate-12 transition-transform duration-300">
+              <Terminal className="text-black w-6 h-6" />
+            </div>
+            <motion.div 
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="absolute -top-1 -right-1 w-3 h-3 bg-secondary rounded-full border-2 border-black"
+            />
           </div>
-          <span className="text-2xl font-bold font-display tracking-wider">BLOCK<span className="text-primary">FORGE</span></span>
-        </div>
+          <span className="text-2xl font-bold font-minecraft tracking-widest group-hover:text-primary transition-colors">BLOCK<span className="text-primary">FORGE</span></span>
+        </motion.div>
 
-        <div className="hidden md:flex items-center gap-8">
-          <a href="#services" className="text-sm font-medium hover:text-primary transition-colors">Услуги</a>
-          <a href="#portfolio" className="text-sm font-medium hover:text-primary transition-colors">Портфолио</a>
-          <a href="#about" className="text-sm font-medium hover:text-primary transition-colors">О студии</a>
-          <Button className="bg-primary text-black hover:bg-primary/90 font-bold border-0 shadow-[0_0_20px_rgba(57,255,20,0.3)]">
-            Заказать <ChevronRight className="w-4 h-4 ml-1" />
+        <div className="hidden md:flex items-center gap-10">
+          {["Услуги", "Портфолио", "О студии"].map((item, idx) => (
+            <motion.a 
+              key={item}
+              href={`#${item}`}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 * idx }}
+              className="text-xs uppercase font-minecraft tracking-[0.2em] hover:text-primary transition-all relative group"
+            >
+              {item}
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
+            </motion.a>
+          ))}
+          <Button className="bg-primary text-black hover:bg-white font-minecraft tracking-tighter border-0 shadow-[4px_4px_0px_#1a3a0e] active:translate-y-1 active:shadow-none transition-all px-6">
+            СТАРТ <ChevronRight className="w-4 h-4 ml-1" />
           </Button>
         </div>
 
-        <button className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-          {mobileMenuOpen ? <X /> : <Menu />}
+        <button className="md:hidden text-primary" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          {mobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
         </button>
       </div>
 
-      {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/10 p-6 flex flex-col gap-4">
-           <a href="#services" className="text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>Услуги</a>
-           <a href="#portfolio" className="text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>Портфолио</a>
-           <Button className="w-full bg-primary text-black">Заказать</Button>
-        </div>
-      )}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-2xl border-b border-white/10 p-6 flex flex-col gap-6"
+          >
+             {["Услуги", "Портфолио", "Команда"].map(item => (
+               <a key={item} href="#" className="text-xl font-minecraft tracking-widest text-center" onClick={() => setMobileMenuOpen(false)}>{item}</a>
+             ))}
+             <Button className="w-full bg-primary text-black font-minecraft text-xl py-6">Связаться</Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
 
 const Hero = () => {
   const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 500], [0, 200]);
+  const y = useTransform(scrollY, [0, 800], [0, 300]);
+  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
+  const scale = useTransform(scrollY, [0, 400], [1, 1.1]);
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background Image with Parallax */}
-      <motion.div 
-        style={{ y }}
-        className="absolute inset-0 z-0"
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/80 to-background z-10" />
+    <div className="relative min-h-[110vh] flex items-center justify-center overflow-hidden">
+      <div className="scanline" />
+      
+      <motion.div style={{ y, opacity, scale }} className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background z-10" />
         <img 
           src="/images/hero-bg.png" 
-          alt="Hero Background" 
-          className="w-full h-full object-cover opacity-60"
+          alt="Workshop" 
+          className="w-full h-full object-cover grayscale-[0.3] brightness-[0.4]"
         />
       </motion.div>
 
-      <div className="container mx-auto px-6 relative z-20 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <Badge className="bg-secondary/20 text-secondary border-secondary/50 mb-6 hover:bg-secondary/30 transition-colors px-4 py-1 text-sm rounded-full backdrop-blur-sm">
-            🚀 Профессиональная разработка для Minecraft
-          </Badge>
-          
-          <h1 className="text-5xl md:text-7xl font-bold font-display mb-6 leading-tight">
-            Создаем <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-green-300 text-glow">Магию</span><br />
-            в Вашем Мире
-          </h1>
-          
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            От кастомных плагинов до сложных модов. Мы превращаем ваши идеи в идеальный код, который работает стабильно и выглядит потрясающе.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="bg-primary text-black hover:bg-primary/90 font-bold text-lg px-8 h-14 rounded-xl shadow-[0_0_30px_rgba(57,255,20,0.4)] hover:shadow-[0_0_50px_rgba(57,255,20,0.6)] transition-all duration-300 transform hover:-translate-y-1">
-              Начать проект
-            </Button>
-            <Button size="lg" variant="outline" className="border-white/20 hover:bg-white/5 text-lg px-8 h-14 rounded-xl backdrop-blur-sm">
-              Наше портфолио
-            </Button>
-          </div>
-        </motion.div>
-
-        {/* Floating Code Snippets Decoration */}
-        <motion.div 
-          className="absolute -left-10 top-1/4 hidden lg:block"
-          animate={{ y: [0, -20, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <div className="bg-black/60 backdrop-blur-md p-4 rounded-lg border border-white/10 font-mono text-xs text-left shadow-2xl">
-            <div className="flex gap-2 mb-2">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500" />
-              <div className="w-3 h-3 rounded-full bg-green-500" />
+      <div className="container mx-auto px-6 relative z-20">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 backdrop-blur-sm">
+              <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+              <span className="text-[10px] uppercase font-minecraft tracking-[0.3em] text-primary">Deploying code to block-space</span>
             </div>
-            <p className="text-purple-400">@EventHandler</p>
-            <p className="text-blue-400">public void <span className="text-yellow-300">onJoin</span>(PlayerJoinEvent e) {"{"}</p>
-            <p className="pl-4 text-gray-300">Player p = e.getPlayer();</p>
-            <p className="pl-4 text-gray-300">p.sendMessage(<span className="text-green-400">"Welcome!"</span>);</p>
-            <p className="text-blue-400">{"}"}</p>
-          </div>
-        </motion.div>
+            
+            <h1 className="text-6xl md:text-9xl font-bold font-display mb-8 leading-none tracking-tighter">
+              BEYOND THE <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-green-400 to-secondary animate-gradient-x text-glow">BLOCKS</span>
+            </h1>
+            
+            <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed font-light font-sans italic opacity-80">
+              Архитектура игровых миров: от высоконагруженных систем до визуальных шедевров.
+            </p>
 
-         <motion.div 
-          className="absolute -right-10 bottom-1/4 hidden lg:block"
-          animate={{ y: [0, 20, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        >
-          <div className="bg-black/60 backdrop-blur-md p-4 rounded-lg border border-white/10 font-mono text-xs text-left shadow-2xl">
-            <div className="flex gap-2 mb-2">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500" />
-              <div className="w-3 h-3 rounded-full bg-green-500" />
+            <div className="flex flex-wrap justify-center gap-6">
+              <Button size="xl" className="bg-primary text-black hover:bg-white font-minecraft text-2xl px-12 h-20 rounded-none shadow-[6px_6px_0px_#1a3a0e] hover:shadow-[10px_10px_0px_#1a3a0e] transition-all transform hover:-translate-x-1 hover:-translate-y-1">
+                BUILD NOW
+              </Button>
+              <Button size="xl" variant="outline" className="border-white/20 hover:bg-white/5 font-minecraft text-2xl px-12 h-20 rounded-none">
+                BROWSE FILES
+              </Button>
             </div>
-            <p className="text-gray-400">// Config.yml</p>
-            <p className="text-blue-400">settings:</p>
-            <p className="pl-4 text-gray-300">enabled: <span className="text-primary">true</span></p>
-            <p className="pl-4 text-gray-300">mode: <span className="text-green-400">"HARDCORE"</span></p>
-            <p className="pl-4 text-gray-300">max-players: <span className="text-purple-400">1000</span></p>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Code Matrix effect decoration */}
+        <div className="absolute top-1/2 left-10 -translate-y-1/2 hidden xl:block opacity-30 pointer-events-none">
+          <motion.div 
+            animate={{ opacity: [0.2, 0.5, 0.2] }} 
+            transition={{ duration: 4, repeat: Infinity }}
+            className="font-mono text-[10px] space-y-1 text-primary"
+          >
+            {Array.from({length: 12}).map((_, i) => (
+              <div key={i}>{Math.random().toString(16).substring(2, 20)}</div>
+            ))}
+          </motion.div>
+        </div>
       </div>
       
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent z-20" />
+      {/* Scroll indicator */}
+      <motion.div 
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40"
+      >
+        <span className="text-[10px] font-minecraft uppercase tracking-widest">Scroll to explore</span>
+        <div className="w-px h-12 bg-gradient-to-b from-primary to-transparent" />
+      </motion.div>
     </div>
   );
 };
@@ -166,60 +182,75 @@ interface FeatureCardProps {
 
 const FeatureCard = ({ icon: Icon, title, description, delay }: FeatureCardProps) => (
   <motion.div
-    initial={{ opacity: 0, y: 20 }}
+    initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ delay, duration: 0.5 }}
+    viewport={{ once: true, margin: "-100px" }}
+    transition={{ delay, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+    className="group"
   >
-    <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 hover:-translate-y-2 hover:border-primary/50 group overflow-hidden relative">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      <CardContent className="p-8 relative z-10">
-        <div className="w-14 h-14 bg-black/50 rounded-2xl flex items-center justify-center mb-6 border border-white/10 group-hover:border-primary/50 group-hover:shadow-[0_0_15px_rgba(57,255,20,0.3)] transition-all">
-          <Icon className="w-7 h-7 text-white group-hover:text-primary transition-colors" />
-        </div>
-        <h3 className="text-xl font-bold font-display mb-3">{title}</h3>
-        <p className="text-gray-400 leading-relaxed">
-          {description}
-        </p>
-      </CardContent>
-    </Card>
+    <div className="relative p-1 overflow-hidden rounded-2xl bg-white/5 hover:bg-primary/20 transition-all duration-500 h-full">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+      <Card className="bg-black border-0 rounded-xl h-full relative z-10 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1">
+        <CardContent className="p-8">
+          <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-6 transition-transform">
+            <Icon className="w-8 h-8 text-primary" />
+          </div>
+          <h3 className="text-2xl font-minecraft tracking-wider mb-4 group-hover:text-primary transition-colors">{title}</h3>
+          <p className="text-gray-500 text-sm leading-relaxed group-hover:text-gray-300 transition-colors">
+            {description}
+          </p>
+          <div className="mt-8 pt-6 border-t border-white/5 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <span className="text-[10px] font-minecraft text-primary tracking-widest">LATEST ENGINE</span>
+            <ChevronRight className="w-4 h-4 text-primary" />
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   </motion.div>
 );
 
 const Services = () => {
   return (
-    <section id="services" className="py-32 bg-background relative overflow-hidden">
-      {/* Background Decor */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
-        <div className="absolute top-1/4 left-0 w-96 h-96 bg-primary/30 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-secondary/30 rounded-full blur-[120px]" />
-      </div>
-
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl font-bold font-display mb-6">Наши <span className="text-primary">Услуги</span></h2>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Мы предлагаем полный цикл разработки для вашего сервера, от идеи до релиза.
-          </p>
+    <section id="services" className="py-40 bg-background relative">
+      <div className="container mx-auto px-6">
+        <div className="flex flex-col md:flex-row items-end justify-between mb-24 gap-8">
+          <div className="max-w-2xl">
+            <motion.div 
+               initial={{ opacity: 0, x: -20 }}
+               whileInView={{ opacity: 1, x: 0 }}
+               viewport={{ once: true }}
+               className="text-primary font-minecraft tracking-[0.4em] mb-4 text-xs uppercase"
+            >
+              System capabilities
+            </motion.div>
+            <h2 className="text-5xl md:text-7xl font-bold font-display leading-tight">
+              ИНЖЕНЕРИЯ <br /> <span className="text-gray-600">НОВОГО УРОВНЯ</span>
+            </h2>
+          </div>
+          <div className="md:text-right">
+            <p className="text-gray-500 max-w-xs font-light text-sm italic">
+              "Мы не просто пишем код, мы строим экосистемы, в которых хочется жить."
+            </p>
+          </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8 xl:gap-12">
           <FeatureCard 
-            icon={Code2}
-            title="Плагины (Spigot/Paper)"
-            description="Оптимизированные плагины любой сложности. Мини-игры, системы экономики, защиты и управления чатом."
+            icon={Terminal}
+            title="CORE PLUGINS"
+            description="Отказоустойчивые решения для Spigot/Paper. Архитектура, готовая к нагрузкам в 1000+ игроков без потерь TPS."
             delay={0.1}
           />
           <FeatureCard 
-            icon={Box}
-            title="Моды (Fabric/Forge)"
-            description="Добавление новых блоков, предметов, механик и измерений. Полная интеграция с клиентом и сервером."
+            icon={Command}
+            title="CUSTOM MODS"
+            description="Глубокое изменение игровых механик на Fabric. Собственные рендеры, шейдеры и комплексные GUI-интерфейсы."
             delay={0.2}
           />
           <FeatureCard 
-            icon={Cpu}
-            title="Оптимизация"
-            description="Аудит производительности вашего сервера. Устранение лагов, настройка конфигураций и JVM флагов."
+            icon={ShieldCheck}
+            title="SYS-SECURITY"
+            description="Комплексная защита от эксплоитов, DDoS-атак прикладного уровня и кастомный анти-чит на основе эвристики."
             delay={0.3}
           />
         </div>
@@ -228,59 +259,86 @@ const Services = () => {
   );
 };
 
-const Stats = () => {
+const Projects = () => {
   return (
-    <section className="py-20 border-y border-white/10 bg-black/40 backdrop-blur-sm">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
-          {[
-            { number: "500+", label: "Плагинов" },
-            { number: "50+", label: "Серверов" },
-            { number: "3", label: "Года Опыта" },
-            { number: "24/7", label: "Поддержка" },
-          ].map((stat, i) => (
-            <motion.div 
-              key={i}
-              initial={{ opacity: 0, scale: 0.5 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-            >
-              <div className="text-4xl md:text-5xl font-bold font-display text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-2">
-                {stat.number}
-              </div>
-              <div className="text-primary font-mono text-sm uppercase tracking-widest">{stat.label}</div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+    <section id="portfolio" className="py-40 bg-black relative">
+       <div className="container mx-auto px-6">
+          <div className="text-center mb-24">
+            <h2 className="text-4xl font-minecraft tracking-[0.2em] mb-4">TERMINAL_LOGS.EXE</h2>
+            <div className="w-20 h-1 bg-primary mx-auto" />
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12">
+             {[1, 2].map(i => (
+               <motion.div 
+                key={i}
+                whileHover={{ y: -10 }}
+                className="relative group cursor-pointer overflow-hidden rounded-3xl"
+               >
+                 <div className="aspect-video bg-gray-900 overflow-hidden relative">
+                    <img 
+                      src={`https://images.unsplash.com/photo-${i === 1 ? '1605379399642-870262d3d051' : '1550745165-9bc0b252726f'}?auto=format&fit=crop&q=80&w=2000`} 
+                      className="w-full h-full object-cover opacity-50 group-hover:scale-110 transition-transform duration-700 grayscale group-hover:grayscale-0"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+                 </div>
+                 <div className="absolute bottom-0 left-0 p-8">
+                    <Badge className="bg-primary text-black font-minecraft mb-4">PROJECT_0{i}</Badge>
+                    <h3 className="text-3xl font-minecraft tracking-widest mb-2">NEON_NETWORK</h3>
+                    <p className="text-gray-400 text-sm font-light">Custom MMORPG engine integration</p>
+                 </div>
+               </motion.div>
+             ))}
+          </div>
+       </div>
     </section>
-  );
-};
+  )
+}
 
 const Footer = () => {
   return (
-    <footer className="py-12 bg-black border-t border-white/10">
-      <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-        <div className="flex items-center gap-2">
-          <Terminal className="text-primary w-6 h-6" />
-          <span className="text-xl font-bold font-display">BLOCK<span className="text-primary">FORGE</span></span>
+    <footer className="py-20 bg-background border-t border-white/5 overflow-hidden">
+      <div className="container mx-auto px-6 relative">
+        <div className="grid md:grid-cols-4 gap-12 mb-20">
+          <div className="md:col-span-2">
+            <div className="flex items-center gap-3 mb-8">
+              <Terminal className="text-primary w-8 h-8" />
+              <span className="text-3xl font-minecraft tracking-widest">BLOCKFORGE</span>
+            </div>
+            <p className="text-gray-500 max-w-sm font-light text-sm leading-relaxed italic">
+              Превращаем виртуальную пыль в цифровую сталь. Код, который не ломается. Дизайн, который не забывается.
+            </p>
+          </div>
+          <div>
+            <h4 className="text-xs uppercase font-minecraft tracking-widest text-primary mb-6">Connect</h4>
+            <div className="flex flex-col gap-4 text-sm text-gray-500 font-light">
+              <a href="#" className="hover:text-primary transition-colors">Discord Community</a>
+              <a href="#" className="hover:text-primary transition-colors">GitHub Repos</a>
+              <a href="#" className="hover:text-primary transition-colors">Telegram Support</a>
+            </div>
+          </div>
+          <div>
+            <h4 className="text-xs uppercase font-minecraft tracking-widest text-primary mb-6">Office</h4>
+            <div className="text-sm text-gray-500 font-light">
+              Remote, Planet Earth<br />
+              GMT +3 / 24/7 Operations
+            </div>
+          </div>
         </div>
         
-        <div className="text-gray-500 text-sm">
-          © 2024 BlockForge Studio. Все права защищены.
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-12 border-t border-white/5">
+          <div className="text-[10px] font-minecraft text-gray-700 tracking-widest uppercase">
+            Built with extreme precision // © 2026 BlockForge
+          </div>
+          <div className="flex gap-8 text-[10px] font-minecraft text-gray-700 tracking-widest uppercase">
+            <a href="#">Security Policy</a>
+            <a href="#">Terms of service</a>
+          </div>
         </div>
 
-        <div className="flex gap-4">
-          <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-black transition-all">
-            <Github className="w-5 h-5" />
-          </a>
-          <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-secondary hover:text-white transition-all">
-            <MessageSquare className="w-5 h-5" />
-          </a>
-          <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-blue-400 hover:text-white transition-all">
-            <Twitter className="w-5 h-5" />
-          </a>
+        {/* Massive background text */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 select-none pointer-events-none opacity-[0.02] whitespace-nowrap text-[25vw] font-bold font-display leading-none">
+          FORGE
         </div>
       </div>
     </footer>
@@ -288,28 +346,46 @@ const Footer = () => {
 };
 
 export default function Home() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary/30">
-      <Navbar />
-      <Hero />
-      <Services />
-      <Stats />
+      <motion.div 
+        className="fixed top-0 left-0 right-0 h-1 bg-primary z-[100] origin-left"
+        style={{ scaleX }}
+      />
       
-      {/* CTA Section */}
-      <section className="py-32 container mx-auto px-6 text-center relative overflow-hidden rounded-3xl my-20 border border-white/10 bg-gradient-to-br from-gray-900 to-black">
-        <div className="relative z-10">
-          <h2 className="text-4xl md:text-6xl font-bold font-display mb-8">Готовы обновить свой сервер?</h2>
-          <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-            Свяжитесь с нами сегодня, и мы обсудим ваш проект. Консультация бесплатна!
-          </p>
-          <Button size="lg" className="bg-primary text-black hover:bg-primary/90 font-bold text-lg px-12 h-16 rounded-xl shadow-[0_0_40px_rgba(57,255,20,0.4)] hover:shadow-[0_0_60px_rgba(57,255,20,0.6)] transition-all">
-            Связаться с нами
-          </Button>
-        </div>
+      <Navbar />
+      <main>
+        <Hero />
+        <Services />
+        <Projects />
         
-        {/* Animated Grid Background */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
-      </section>
+        {/* Advanced CTA */}
+        <section className="py-40 container mx-auto px-6 relative">
+          <div className="relative z-10 p-12 md:p-24 rounded-[40px] border border-white/5 bg-gradient-to-br from-white/[0.03] to-transparent backdrop-blur-3xl overflow-hidden group">
+            <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/20 rounded-full blur-[100px] group-hover:bg-primary/30 transition-colors" />
+            
+            <div className="relative z-10 flex flex-col items-center text-center">
+              <Badge className="bg-primary/10 text-primary border-primary/20 font-minecraft mb-8 px-6 py-2 tracking-[0.3em]">INITIATE_CONNECTION</Badge>
+              <h2 className="text-5xl md:text-8xl font-bold font-display mb-10 tracking-tighter">
+                ДАВАЙТЕ СТРОИТЬ <br /> <span className="text-primary">ВМЕСТЕ</span>
+              </h2>
+              <p className="text-xl text-gray-500 mb-12 max-w-xl font-light italic">
+                Отправьте свой запрос в наш терминал, и мы свяжемся с вами в течение 12 часов.
+              </p>
+              <Button size="xl" className="bg-primary text-black hover:bg-white font-minecraft text-3xl px-16 h-24 rounded-none shadow-[10px_10px_0px_#1a3a0e] transition-all">
+                GET_STARTED.SH
+              </Button>
+            </div>
+          </div>
+        </section>
+      </main>
 
       <Footer />
     </div>
