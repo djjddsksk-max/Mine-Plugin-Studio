@@ -55,10 +55,10 @@
     @apply border-border;
   }
   body {
-    @apply font-sans antialiased bg-background text-foreground selection:bg-primary/30 selection:text-primary;
+    @apply font-sans antialiased bg-background text-white selection:bg-primary/30 selection:text-primary;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display tracking-tight;
+    @apply font-display tracking-tight font-bold;
   }
 }
 
@@ -80,7 +80,7 @@
   }
 
   .minecraft-text {
-    @apply font-minecraft text-2xl tracking-widest uppercase;
+    @apply font-minecraft text-3xl tracking-widest uppercase;
   }
 
   .scanline {
