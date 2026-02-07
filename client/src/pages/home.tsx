@@ -24,8 +24,8 @@ import { Badge } from "@/components/ui/badge";
 const PerspectiveCard = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const rotateX = useTransform(y, [-100, 100], [10, -10]);
-  const rotateY = useTransform(x, [-100, 100], [-10, 10]);
+  const rotateX = useSpring(useTransform(y, [-100, 100], [10, -10]), { stiffness: 100, damping: 30 });
+  const rotateY = useSpring(useTransform(x, [-100, 100], [-10, 10]), { stiffness: 100, damping: 30 });
 
   function onMouseMove(event: React.MouseEvent) {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -76,7 +76,7 @@ const Navbar = () => {
         </motion.div>
 
         <div className="hidden md:flex items-center gap-12">
-          {["Услуги", "Портфолио", "Команда"].map((item, idx) => (
+          {["Услуги", "Портфолио", "Команда"].map((item) => (
             <motion.a 
               key={item}
               href={`#${item}`}
@@ -87,7 +87,7 @@ const Navbar = () => {
             </motion.a>
           ))}
           <Button className="bg-primary text-black hover:bg-white font-bold px-10 h-14 rounded-2xl transition-all shadow-[0_10px_30px_-10px_rgba(57,255,20,0.5)] active:scale-95 group">
-            START_PROJECT <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+            ОБСУДИТЬ ПРОЕКТ <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
           </Button>
         </div>
 
@@ -108,7 +108,7 @@ const Navbar = () => {
              {["Услуги", "Портфолио", "Команда"].map(item => (
                <a key={item} href="#" className="text-4xl font-bold tracking-tighter" onClick={() => setMobileMenuOpen(false)}>{item}</a>
              ))}
-             <Button className="w-64 bg-primary text-black font-bold text-2xl py-10 rounded-3xl">CONTACT_US</Button>
+             <Button className="w-64 bg-primary text-black font-bold text-2xl py-10 rounded-3xl">СВЯЗАТЬСЯ</Button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -140,7 +140,7 @@ const Hero = () => {
           >
             <div className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-primary/5 border border-primary/10 mb-12 backdrop-blur-3xl animate-float-3d">
               <Sparkles className="w-5 h-5 text-primary" />
-              <span className="text-sm font-bold uppercase tracking-[0.4em] text-primary/80">Next-Gen Virtual Architect</span>
+              <span className="text-sm font-bold uppercase tracking-[0.4em] text-primary/80">Виртуальный Архитектор Нового Поколения</span>
             </div>
             
             <h1 className="text-7xl md:text-[14rem] font-bold font-display mb-12 leading-[0.8] tracking-tightest preserve-3d">
@@ -150,7 +150,7 @@ const Hero = () => {
                 transition={{ delay: 0.5, duration: 1 }}
                 className="block text-white"
               >
-                CRAFTING
+                СОЗДАЕМ
               </motion.span>
               <motion.span 
                 initial={{ y: 100, opacity: 0 }}
@@ -158,7 +158,7 @@ const Hero = () => {
                 transition={{ delay: 0.7, duration: 1 }}
                 className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-green-400 to-secondary text-glow-strong"
               >
-                REALMS
+                МИРЫ
               </motion.span>
             </h1>
             
@@ -179,11 +179,11 @@ const Hero = () => {
             >
               <PerspectiveCard>
                 <Button size="xl" className="bg-primary text-black hover:bg-white font-bold text-3xl px-16 h-24 rounded-3xl shadow-[0_20px_50px_rgba(57,255,20,0.4)] transition-all">
-                  INITIALIZE_PROJ
+                  НАЧАТЬ ПРОЕКТ
                 </Button>
               </PerspectiveCard>
               <Button size="xl" variant="outline" className="border-white/5 hover:bg-white/5 font-bold text-3xl px-16 h-24 rounded-3xl backdrop-blur-3xl">
-                VIEW_REPOS
+                ПОРТФОЛИО
               </Button>
             </motion.div>
           </motion.div>
@@ -192,6 +192,13 @@ const Hero = () => {
     </section>
   );
 };
+
+interface FeatureCardProps {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  delay: number;
+}
 
 const FeatureCard = ({ icon: Icon, title, description, delay }: FeatureCardProps) => {
   const ref = useRef(null);
@@ -215,7 +222,7 @@ const FeatureCard = ({ icon: Icon, title, description, delay }: FeatureCardProps
             {description}
           </p>
           <div className="mt-12 flex items-center gap-4 text-primary font-bold tracking-widest text-sm opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0">
-             SYSTEM_STATUS: ACTIVE <ChevronRight className="w-4 h-4" />
+             СТАТУС: АКТИВЕН <ChevronRight className="w-4 h-4" />
           </div>
         </div>
       </PerspectiveCard>
@@ -229,9 +236,9 @@ const Services = () => {
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-24 items-end mb-40">
           <div>
-            <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.5em] font-bold">ABILITIES_LOG</Badge>
-            <h2 className="text-7xl md:text-9xl font-bold leading-[0.85] tracking-tightest">
-              WE ENGINEER <br /> <span className="text-gray-800">THE IMPOSSIBLE</span>
+            <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.5em] font-bold">ЛОГ_СПОСОБНОСТЕЙ</Badge>
+            <h2 className="text-7xl md:text-9xl font-bold leading-[0.85] tracking-tightest uppercase">
+              МЫ СОЗДАЕМ <br /> <span className="text-gray-800">НЕВОЗМОЖНОЕ</span>
             </h2>
           </div>
           <p className="text-2xl text-gray-500 font-medium leading-tight max-w-md">
@@ -240,9 +247,9 @@ const Services = () => {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-12">
-          <FeatureCard icon={Cpu} title="CORE_CORE" description="Разработка нативных плагинов с прямым доступом к памяти для экстремальной производительности." delay={0.1} />
-          <FeatureCard icon={Layers} title="MOD_LOGIC" description="Сложные многоуровневые моды, интегрирующие внешние API и кастомные рендеры." delay={0.2} />
-          <FeatureCard icon={ShieldCheck} title="SEC_VAULT" description="Квантово-устойчивая защита игровых данных и транзакций внутри вашего сервера." delay={0.3} />
+          <FeatureCard icon={Cpu} title="ЯДРО_СИСТЕМЫ" description="Разработка нативных плагинов с прямым доступом к памяти для экстремальной производительности." delay={0.1} />
+          <FeatureCard icon={Layers} title="ЛОГИКА_МОДОВ" description="Сложные многоуровневые моды, интегрирующие внешние API и кастомные рендеры." delay={0.2} />
+          <FeatureCard icon={ShieldCheck} title="ЗАЩИТА" description="Квантово-устойчивая защита игровых данных и транзакций внутри вашего сервера." delay={0.3} />
         </div>
       </div>
     </section>
@@ -260,7 +267,7 @@ const Footer = () => {
                 <span className="text-5xl font-bold font-display tracking-tightest">BLOCKFORGE</span>
               </div>
               <p className="text-2xl text-gray-500 max-w-lg font-medium tracking-tight">
-                Engineering Digital Eternity. <br /> Crafted by the elite for the visionaries.
+                Инженерия Цифровой Вечности. <br /> Создано элитой для визионеров.
               </p>
            </div>
            <div className="flex flex-wrap justify-center gap-12 md:gap-24">
@@ -273,8 +280,8 @@ const Footer = () => {
         <div className="pt-20 border-t border-white/5 flex flex-col md:row justify-between items-center gap-10">
           <span className="text-gray-700 font-bold uppercase tracking-[1em] text-[12px]">© 2026 BLOCKFORGE // THE_APEX_ENGINE</span>
           <div className="flex gap-12 text-gray-700 font-bold uppercase tracking-widest text-[12px]">
-             <a href="#" className="hover:text-white transition-colors">Safety_Log</a>
-             <a href="#" className="hover:text-white transition-colors">Legal_Doc</a>
+             <a href="#" className="hover:text-white transition-colors">Политика безопасности</a>
+             <a href="#" className="hover:text-white transition-colors">Правовая информация</a>
           </div>
         </div>
       </div>
@@ -301,9 +308,9 @@ export default function Home() {
            >
               <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
               <div className="relative z-10">
-                <h2 className="text-7xl md:text-[12rem] font-bold mb-16 tracking-tightest leading-none">READY TO <br /> <span className="text-primary">ASCEND?</span></h2>
+                <h2 className="text-7xl md:text-[12rem] font-bold mb-16 tracking-tightest leading-none">ГОТОВЫ <br /> <span className="text-primary">ВЗЛЕТАТЬ?</span></h2>
                 <Button size="xl" className="bg-primary text-black hover:bg-white font-bold text-4xl px-20 h-32 rounded-[40px] shadow-[0_30px_100px_rgba(57,255,20,0.5)] transition-all transform hover:-translate-y-4">
-                   CONNECT_NOW
+                   СВЯЗАТЬСЯ С НАМИ
                 </Button>
               </div>
            </motion.div>
