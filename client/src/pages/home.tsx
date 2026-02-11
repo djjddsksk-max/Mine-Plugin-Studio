@@ -289,12 +289,51 @@ const Footer = () => {
   );
 };
 
+const Petals = () => {
+  return (
+    <div className="fixed inset-0 pointer-events-none z-[99] overflow-hidden">
+      {[...Array(20)].map((_, i) => (
+        <motion.div
+          key={i}
+          initial={{ 
+            top: -20, 
+            left: `${Math.random() * 100}%`,
+            scale: Math.random() * 0.5 + 0.5,
+            rotate: Math.random() * 360
+          }}
+          animate={{
+            top: "110%",
+            left: `${(Math.random() * 100)}%`,
+            rotate: 360,
+          }}
+          transition={{
+            duration: Math.random() * 10 + 15,
+            repeat: Infinity,
+            ease: "linear",
+            delay: Math.random() * 20
+          }}
+          style={{
+            position: 'absolute',
+            width: '15px',
+            height: '20px',
+            background: 'linear-gradient(135deg, #ffb7c5 0%, #ff9aae 100%)',
+            borderRadius: '150% 0 150% 0',
+            opacity: 0.6,
+            filter: 'blur(1px)'
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 export default function Home() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
   return (
     <div className="min-h-screen bg-background text-white selection:bg-primary/30">
+      <Petals />
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-primary z-[200] shadow-[0_0_20px_#39ff14]" style={{ scaleX }} />
       <Navbar />
       <main>
