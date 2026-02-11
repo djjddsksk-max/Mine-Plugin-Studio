@@ -235,21 +235,21 @@ const Services = () => {
     <section id="services" className="py-60 bg-background relative">
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-24 items-end mb-40">
-          <div>
-            <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.5em] font-bold">ЛОГ_СПОСОБНОСТЕЙ</Badge>
+          <div className="relative z-10">
+            <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.5em] font-bold uppercase">Наши Возможности</Badge>
             <h2 className="text-7xl md:text-9xl font-bold leading-[0.85] tracking-tightest uppercase">
-              МЫ СОЗДАЕМ <br /> <span className="text-gray-800">НЕВОЗМОЖНОЕ</span>
+              МЫ СОЗДАЕМ <br /> <span className="text-gray-800/50">НЕВОЗМОЖНОЕ</span>
             </h2>
           </div>
-          <p className="text-2xl text-gray-500 font-medium leading-tight max-w-md">
+          <p className="text-2xl text-gray-400 font-medium leading-tight max-w-md relative z-20">
             От кастомных JVM-оптимизаций до нейронных сетей внутри игровых движков. Мы не знаем границ.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-12">
-          <FeatureCard icon={Cpu} title="ЯДРО_СИСТЕМЫ" description="Разработка нативных плагинов с прямым доступом к памяти для экстремальной производительности." delay={0.1} />
-          <FeatureCard icon={Layers} title="ЛОГИКА_МОДОВ" description="Сложные многоуровневые моды, интегрирующие внешние API и кастомные рендеры." delay={0.2} />
-          <FeatureCard icon={ShieldCheck} title="ЗАЩИТА" description="Квантово-устойчивая защита игровых данных и транзакций внутри вашего сервера." delay={0.3} />
+        <div className="grid lg:grid-cols-3 gap-12 relative z-10">
+          <FeatureCard icon={Cpu} title="Ядро Системы" description="Разработка нативных плагинов с прямым доступом к памяти для экстремальной производительности." delay={0.1} />
+          <FeatureCard icon={Layers} title="Логика Модов" description="Сложные многоуровневые моды, интегрирующие внешние API и кастомные рендеры." delay={0.2} />
+          <FeatureCard icon={ShieldCheck} title="Защита Системы" description="Квантово-устойчивая защита игровых данных и транзакций внутри вашего сервера." delay={0.3} />
         </div>
       </div>
     </section>
@@ -272,7 +272,7 @@ const Footer = () => {
            </div>
            <div className="flex flex-wrap justify-center gap-12 md:gap-24">
               {["Github", "Discord", "Telegram"].map(social => (
-                <motion.a key={social} whileHover={{ y: -10, color: "#39ff14" }} className="text-2xl font-bold uppercase tracking-widest text-gray-600 cursor-pointer">{social}</motion.a>
+                <motion.a key={social} whileHover={{ y: -2, color: "#39ff14" }} className="text-2xl font-bold uppercase tracking-widest text-gray-600 cursor-pointer">{social}</motion.a>
               ))}
            </div>
         </div>
