@@ -147,16 +147,16 @@ const Hero = () => {
               <motion.span 
                 initial={{ y: 100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.5, duration: 1 }}
-                className="block text-white hover:text-primary transition-colors duration-300 cursor-default"
+                transition={{ delay: 0.5, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                className="block text-white hover:text-primary transition-colors duration-700 ease-in-out cursor-default"
               >
                 СОЗДАЕМ
               </motion.span>
               <motion.span 
                 initial={{ y: 100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.7, duration: 1 }}
-                className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-green-400 to-secondary text-glow-strong hover:brightness-125 transition-all duration-300 cursor-default"
+                transition={{ delay: 0.7, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-green-400 to-secondary text-glow-strong hover:brightness-125 transition-all duration-700 ease-in-out cursor-default"
               >
                 МИРЫ
               </motion.span>
@@ -165,8 +165,8 @@ const Hero = () => {
             <motion.p 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1, duration: 1 }}
-              className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-20 leading-relaxed font-medium tracking-normal hover:text-white transition-colors duration-300"
+              transition={{ delay: 1, duration: 1.5 }}
+              className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-20 leading-relaxed font-medium tracking-normal hover:text-white transition-colors duration-700 ease-in-out"
             >
               Мы создаем сложные технические шедевры внутри Minecraft, <br className="hidden md:block" /> где каждый блок — это безупречный код.
             </motion.p>
@@ -217,7 +217,7 @@ const FeatureCard = ({ icon: Icon, title, description, delay }: FeatureCardProps
           <div className="w-24 h-24 rounded-[30px] bg-primary/10 flex items-center justify-center mb-10 group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-500">
             <Icon className="w-12 h-12 text-primary" />
           </div>
-          <h3 className="text-3xl font-bold mb-6 tracking-tight group-hover:text-primary transition-colors hover:translate-x-2 duration-300">{title}</h3>
+          <h3 className="text-3xl font-bold mb-6 tracking-tight group-hover:text-primary transition-all duration-700 ease-out hover:translate-x-2">{title}</h3>
           <p className="text-gray-400 text-lg leading-relaxed font-medium group-hover:text-gray-200 transition-colors">
             {description}
           </p>
@@ -236,12 +236,12 @@ const Services = () => {
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-24 items-end mb-40">
           <div className="relative z-10">
-            <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.2em] font-bold uppercase hover:bg-primary/20 transition-all cursor-default">Наши Возможности</Badge>
-            <h2 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight uppercase relative z-10 hover:text-primary transition-all duration-500 cursor-default group/title">
-              МЫ СОЗДАЕМ <br /> <span className="text-gray-800/30 group-hover/title:text-gray-700/50 transition-all duration-500">НЕВОЗМОЖНОЕ</span>
+            <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.2em] font-bold uppercase hover:bg-primary/20 transition-all duration-500 cursor-default">Наши Возможности</Badge>
+            <h2 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight uppercase relative z-10 hover:text-primary transition-all duration-700 ease-in-out cursor-default group/title">
+              МЫ СОЗДАЕМ <br /> <span className="text-gray-800/30 group-hover/title:text-gray-700/50 transition-all duration-700 ease-in-out">НЕВОЗМОЖНОЕ</span>
             </h2>
           </div>
-          <p className="text-lg md:text-xl text-gray-400 font-medium leading-relaxed max-w-md relative z-20 hover:text-white transition-all duration-300">
+          <p className="text-lg md:text-xl text-gray-400 font-medium leading-relaxed max-w-md relative z-20 hover:text-white transition-all duration-700 ease-in-out">
             От кастомных JVM-оптимизаций до нейронных сетей внутри игровых движков. Мы не знаем границ.
           </p>
         </div>
