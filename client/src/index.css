@@ -6,14 +6,16 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: 'Outfit', sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --font-display: 'Oxanium', cursive;
-  --font-minecraft: 'VT323', monospace;
+  --font-display: 'Inter', system-ui, sans-serif;
+  --font-minecraft: 'Inter', system-ui, sans-serif;
 
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
 
   --color-background: hsl(240 10% 2%);
   --color-foreground: hsl(0 0% 98%);
