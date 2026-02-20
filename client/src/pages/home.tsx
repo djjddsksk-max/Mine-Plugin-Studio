@@ -349,9 +349,17 @@ const Stats = () => {
     { label: "Техподдержка", value: "24/7", suffix: "" },
   ];
 
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], [0, -150]);
+
   return (
     <section className="py-20 bg-background relative overflow-hidden">
-      <div className="container mx-auto px-6">
+      {/* Parallax Background Elements */}
+      <motion.div style={{ y }} className="absolute inset-0 opacity-10 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 blur-[120px] rounded-full" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/20 blur-[120px] rounded-full" />
+      </motion.div>
+      <div className="container mx-auto px-6 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, idx) => (
             <StatItem key={idx} stat={stat} delay={idx * 0.1} />
@@ -368,33 +376,43 @@ const StatItem = ({ stat, delay }: { stat: any; delay: number }) => {
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   useEffect(() => {
-    if (isInView) {
-      if (typeof stat.value === "number") {
-        let start = 0;
-        const end = stat.value;
-        const duration = 2000;
-        const increment = end / (duration / 16);
+    if (isInView && typeof stat.value === "number") {
+      const startTime = Date.now();
+      const duration = 2000;
+      const endValue = stat.value;
+
+      const updateCount = () => {
+        const now = Date.now();
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
         
-        const timer = setInterval(() => {
-          start += increment;
-          if (start >= end) {
-            setCount(end);
-            clearInterval(timer);
-          } else {
-            setCount(start);
-          }
-        }, 16);
-        return () => clearInterval(timer);
-      }
+        // Easing function: easeOutExpo
+        const easeOutExpo = 1 - Math.pow(2, -10 * progress);
+        const currentValue = endValue * easeOutExpo;
+
+        setCount(currentValue);
+
+        if (progress < 1) {
+          requestAnimationFrame(updateCount);
+        } else {
+          setCount(endValue);
+        }
+      };
+
+      requestAnimationFrame(updateCount);
     }
   }, [isInView, stat.value]);
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay, duration: 0.8 }}
+      initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+      animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+      transition={{ 
+        delay, 
+        duration: 1.2, 
+        ease: [0.16, 1, 0.3, 1] 
+      }}
       className="relative group"
     >
       <div className="glass-premium p-8 rounded-3xl border border-white/5 text-center transition-all duration-500 group-hover:border-primary/50 group-hover:shadow-[0_0_30px_rgba(57,255,20,0.15)] group-hover:-translate-y-2">
@@ -465,9 +483,20 @@ const FeatureCard = ({ icon: Icon, title, description, delay }: FeatureCardProps
 const Services = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
   return (
-    <section id="services" ref={ref} className="py-60 bg-background relative">
+    <section id="services" ref={ref} className="py-60 bg-background relative overflow-hidden">
+      <motion.div 
+        style={{ y: backgroundY }}
+        className="absolute inset-0 opacity-[0.03] pointer-events-none select-none flex items-center justify-center text-[20vw] font-black leading-none uppercase tracking-tighter"
+      >
+        SERVICES
+      </motion.div>
       <div className="container mx-auto px-6">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
@@ -477,9 +506,14 @@ const Services = () => {
         >
           <div className="relative z-10">
             <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.2em] font-bold uppercase hover:bg-primary/20 transition-all duration-500 cursor-default">Наши услуги</Badge>
-            <h2 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight uppercase relative z-10 hover:text-primary transition-all duration-700 ease-in-out cursor-default group/title">
+            <motion.h2 
+              initial={{ filter: "blur(20px)", opacity: 0 }}
+              animate={isInView ? { filter: "blur(0px)", opacity: 1 } : {}}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+              className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight uppercase relative z-10 hover:text-primary transition-all duration-700 ease-in-out cursor-default group/title"
+            >
               ДЕЛАЕМ ВАШ <br /> <span className="text-gray-800/30 group-hover/title:text-gray-700/50 transition-all duration-700 ease-in-out">ПРОЕКТ</span>
-            </h2>
+            </motion.h2>
           </div>
           <p className="text-lg md:text-xl text-gray-400 font-medium leading-relaxed max-w-md relative z-20 hover:text-white transition-all duration-700 ease-in-out">
             Превращаем идеи в код. Каждый проект - это технический шедевр.
@@ -536,7 +570,7 @@ const WorkProcess = () => {
     offset: ["start end", "end start"]
   });
 
-  const lineHeight = useSpring(useTransform(scrollYProgress, [0.1, 0.9], ["0%", "100%"]), {
+  const lineHeight = useSpring(useTransform(scrollYProgress, [0.15, 0.85], ["0%", "100%"]), {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001
@@ -547,12 +581,17 @@ const WorkProcess = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-40">
           <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.2em] font-bold uppercase cursor-default">Процесс</Badge>
-          <h2 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight uppercase cursor-default">
+          <motion.h2 
+            initial={{ filter: "blur(20px)", opacity: 0 }}
+            whileInView={{ filter: "blur(0px)", opacity: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight uppercase cursor-default"
+          >
             КАК МЫ <span className="text-gray-800/30">РАБОТАЕМ</span>
-          </h2>
+          </motion.h2>
         </div>
 
-        <div className="relative max-w-4xl mx-auto">
+        <div className="relative max-w-5xl mx-auto">
           {/* Vertical Line */}
           <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/5 -translate-x-1/2 hidden md:block" />
           <motion.div 
@@ -560,9 +599,9 @@ const WorkProcess = () => {
             className="absolute left-1/2 top-0 w-px bg-primary -translate-x-1/2 z-10 hidden md:block shadow-[0_0_15px_rgba(57,255,20,0.5)]" 
           />
 
-          <div className="space-y-32">
-            {steps.map((step, idx) => (
-              <ProcessStep key={idx} step={step} index={idx} />
+          <div className="space-y-40">
+            {steps.map((step, index) => (
+              <ProcessStep key={index} step={step} index={index} />
             ))}
           </div>
         </div>
@@ -579,40 +618,54 @@ const ProcessStep = ({ step, index }: { step: any, index: number }) => {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, x: isEven ? -50 : 50 }}
-      animate={isInView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.8, delay: index * 0.1 }}
-      className={`relative flex items-center justify-center md:justify-between ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+      initial={{ 
+        opacity: 0, 
+        x: isEven ? -100 : 100,
+        filter: "blur(10px)"
+      }}
+      animate={isInView ? { 
+        opacity: 1, 
+        x: 0,
+        filter: "blur(0px)"
+      } : {}}
+      transition={{ 
+        duration: 1, 
+        ease: [0.16, 1, 0.3, 1],
+        delay: 0.2
+      }}
+      className={`relative flex flex-col md:flex-row items-center gap-12 group ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}
     >
-      {/* Content */}
+      {/* Content Card */}
       <div className={`w-full md:w-[42%] ${isEven ? 'md:text-right' : 'md:text-left'}`}>
-        <div className="glass-premium p-8 rounded-3xl border border-white/5 hover:border-primary/30 transition-all duration-500 group">
-          <div className={`flex items-center gap-4 mb-4 ${isEven ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-black transition-all duration-500">
-              <step.icon size={24} />
+        <div className="glass-premium p-10 rounded-[40px] border border-white/5 hover:border-primary/30 transition-all duration-700 group">
+          <div className={`flex items-center gap-6 mb-6 ${isEven ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
+            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-black transition-all duration-700 shadow-[0_0_20px_rgba(57,255,20,0.1)] group-hover:shadow-[0_0_30px_rgba(57,255,20,0.4)]">
+              <step.icon size={32} />
             </div>
-            <h3 className="text-2xl font-bold tracking-tight">{step.title}</h3>
+            <h3 className="text-3xl font-bold tracking-tight group-hover:text-primary transition-colors duration-500">{step.title}</h3>
           </div>
-          <p className="text-gray-400 mb-6 leading-relaxed">{step.description}</p>
-          <div className={`flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary ${isEven ? 'md:justify-end' : 'md:justify-start'}`}>
-            <Clock size={14} />
+          <p className="text-gray-400 text-lg mb-8 leading-relaxed font-medium group-hover:text-gray-200 transition-colors duration-500">{step.description}</p>
+          <div className={`flex items-center gap-3 text-sm font-bold uppercase tracking-[0.2em] text-primary/60 group-hover:text-primary transition-colors duration-500 ${isEven ? 'md:justify-end' : 'md:justify-start'}`}>
+            <Clock size={16} />
             {step.duration}
           </div>
         </div>
       </div>
 
       {/* Point on Line */}
-      <div className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-background border-2 border-white/10 z-20 hidden md:block group-hover:scale-125 transition-transform duration-500">
+      <div className="absolute left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-background border-2 border-white/10 z-20 hidden md:block group-hover:scale-125 transition-transform duration-700 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
         <motion.div 
           initial={{ scale: 0 }}
           animate={isInView ? { scale: 1 } : {}}
-          transition={{ delay: 0.5, duration: 0.5 }}
-          className="w-full h-full rounded-full bg-primary shadow-[0_0_10px_#39ff14]" 
+          transition={{ delay: 0.6, type: "spring", stiffness: 200, damping: 20 }}
+          className="w-full h-full rounded-full bg-primary shadow-[0_0_15px_#39ff14]" 
         />
       </div>
 
-      {/* Spacer for mobile/desktop alignment */}
-      <div className="hidden md:block md:w-[42%]" />
+      {/* Spacer / Step Number */}
+      <div className={`hidden md:flex md:w-[42%] opacity-5 text-[10rem] font-black italic tracking-tighter pointer-events-none select-none ${isEven ? 'justify-start' : 'justify-end'}`}>
+        0{index + 1}
+      </div>
     </motion.div>
   );
 };
