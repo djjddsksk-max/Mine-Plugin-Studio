@@ -77,13 +77,16 @@ export function MusicPlayer() {
           >
             <motion.div
               layout
+              transition={{
+                layout: { duration: 0.3, type: "spring", stiffness: 200, damping: 25 }
+              }}
               className="bg-black/80 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden flex items-center px-4"
               style={{
                 borderRadius: isExpanded ? "24px" : "999px",
                 width: isExpanded ? "320px" : "60px",
                 height: isExpanded ? "80px" : "32px",
               }}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               {!isExpanded ? (
@@ -101,25 +104,25 @@ export function MusicPlayer() {
                   animate={{ opacity: 1 }}
                   className="w-full flex flex-col gap-2 py-2"
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 overflow-hidden">
+                  <div className="flex items-center justify-between pointer-events-auto">
+                    <div className="flex items-center gap-3 overflow-hidden select-none">
                       <motion.div layoutId="icon">
                         <Music className={`w-5 h-5 text-[#00ff41] ${isPlaying ? "animate-pulse" : ""}`} />
                       </motion.div>
                       <div className="flex flex-col overflow-hidden">
-                        <span className="text-xs font-bold text-white truncate">Cybertrack 2077</span>
-                        <span className="text-[10px] text-white/50 truncate">Background Ambience</span>
+                        <span className="text-xs font-bold text-white truncate leading-tight">Cybertrack 2077</span>
+                        <span className="text-[10px] text-white/50 truncate leading-tight">Background Ambience</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
                       <button 
                         onClick={togglePlay}
-                        className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                        className="p-2 hover:bg-white/10 rounded-full transition-colors active:scale-90"
                       >
                         {isPlaying ? (
-                          <Pause className="w-4 h-4 text-[#00ff41]" />
+                          <Pause className="w-4 h-4 text-[#00ff41] fill-[#00ff41]" />
                         ) : (
-                          <Play className="w-4 h-4 text-[#00ff41]" />
+                          <Play className="w-4 h-4 text-[#00ff41] fill-[#00ff41]" />
                         )}
                       </button>
                       <button 
@@ -127,22 +130,22 @@ export function MusicPlayer() {
                           e.stopPropagation();
                           setIsExpanded(false);
                         }}
-                        className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                        className="p-2 hover:bg-white/10 rounded-full transition-colors active:scale-90"
                       >
                         <Minimize2 className="w-4 h-4 text-white/70" />
                       </button>
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-3 px-1">
+                  <div className="flex items-center gap-3 px-1 pointer-events-auto">
                     <Volume2 className="w-3 h-3 text-white/50" />
                     <Slider
                       value={[volume * 100]}
                       max={100}
                       step={1}
                       onValueChange={(val) => setVolume(val[0] / 100)}
-                      onClick={(e) => e.stopPropagation()}
-                      className="w-full"
+                      onPointerDown={(e) => e.stopPropagation()}
+                      className="w-full cursor-pointer [&_[role=slider]]:bg-[#00ff41] [&_[role=slider]]:border-none"
                     />
                   </div>
                 </motion.div>
