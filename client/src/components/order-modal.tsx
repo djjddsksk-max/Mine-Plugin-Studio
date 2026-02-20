@@ -106,7 +106,7 @@ export function OrderModal({ isOpen, onClose, initialValues }: { isOpen: boolean
                   <h2 className="text-3xl font-bold text-white tracking-tight mb-2">
                     ОБСУДИТЬ <span className="text-primary">ПРОЕКТ</span>
                   </h2>
-                  <p className="text-gray-400">Заполните форму, и мы создадим нечто легендарное</p>
+                  <p className="text-gray-400">Заполните форму, и мы создадим для вас идеальное решение</p>
                 </div>
 
                 <Form {...form}>

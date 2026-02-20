@@ -240,21 +240,21 @@ const NewsSection = () => {
     {
       title: "Поддержка Minecraft 1.21",
       date: "15 фев 2026",
-      description: "Полная совместимость всех наших плагинов и модов с последней версией игры. Оптимизация производительности и новые API.",
+      description: "Все наши плагины и моды полностью совместимы с последней версией Minecraft. Оптимизация под новые API и улучшенная производительность.",
       image: "linear-gradient(135deg, #39ff14 0%, #000 100%)",
       icon: <Box className="w-8 h-8 text-primary" />
     },
     {
       title: "Новый тариф 'Корпоративный'",
       date: "10 фев 2026",
-      description: "Эксклюзивные условия для крупных игровых сетей: персональный менеджер, SLA 99.9% и приоритетная разработка.",
+      description: "Специальные условия для крупных игровых сетей: персональный менеджер проекта, гарантия SLA 99.9% и приоритетная разработка.",
       image: "linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%)",
       icon: <Server className="w-8 h-8 text-blue-400" />
     },
     {
       title: "Интеграция с Discord API",
       date: "5 фев 2026",
-      description: "Улучшенная синхронизация игровых событий с вашим Discord-сервером. Новые возможности для автоматизации сообщества.",
+      description: "Расширенная синхронизация игровых событий с Discord-сервером. Автоматические уведомления, статистика и управление сообществом.",
       image: "linear-gradient(135deg, #5865F2 0%, #000 100%)",
       icon: <MessageCircle className="w-8 h-8 text-[#5865F2]" />
     }
@@ -398,7 +398,7 @@ const PriceCalculator = ({ onOrder }: { onOrder: (data: any) => void }) => {
           <div className="text-center mb-16">
             <Badge className="bg-primary/10 text-primary border-primary/20 mb-6 px-6 py-2 text-sm rounded-xl tracking-widest uppercase">Калькулятор</Badge>
             <h2 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase mb-6">Рассчитайте стоимость</h2>
-            <p className="text-gray-400 text-lg">Выберите параметры вашего идеального проекта</p>
+            <p className="text-gray-400 text-lg">Выберите параметры вашего проекта и узнайте предварительную стоимость</p>
           </div>
 
           <div className="glass-premium p-8 md:p-12 rounded-[40px] border border-white/5 shadow-2xl">
@@ -1068,7 +1068,7 @@ const Hero = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
               transition={{ delay: 1, duration: 1.5 }}
               className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-20 leading-relaxed font-medium tracking-normal hover:text-white transition-colors duration-700 ease-in-out"
             >
-              Создаем серверы мечты для 1000+ игроков. <br className="hidden md:block" /> Плагины, которые меняют игру навсегда.
+              Разрабатываем высоконагруженные серверы для 1000+ игроков онлайн. <br className="hidden md:block" /> Плагины и моды, которые выделяют ваш проект среди тысяч других.
             </motion.p>
 
             <motion.div 
@@ -1261,25 +1261,25 @@ const Services = () => {
   const services = [
     {
       title: "Разработка плагинов",
-      description: "От простых утилит до сложнейших игровых механик на Spigot/Paper API.",
+      description: "Создаем плагины любой сложности на Spigot/Paper API. От простых команд до комплексных игровых механик.",
       icon: Zap,
       gradient: "from-primary/20 to-transparent"
     },
     {
       title: "Создание модов",
-      description: "Глубокая модификация игры на Forge/Fabric для уникального геймплея.",
+      description: "Глубокая модификация клиента и сервера на Forge/Fabric. Новые блоки, мобы, измерения и механики.",
       icon: Layers,
       gradient: "from-secondary/20 to-transparent"
     },
     {
       title: "Настройка серверов",
-      description: "Оптимизация, защита от DDOS и сборка под ключ для стабильной работы.",
+      description: "Полная настройка и оптимизация сервера под ключ. Защита от DDoS, настройка производительности.",
       icon: Cpu,
       gradient: "from-blue-500/20 to-transparent"
     },
     {
       title: "Системы экономики",
-      description: "Сложные банковские системы, торговые площадки и интеграция с БД.",
+      description: "Разработка сложных экономических систем. Банки, аукционы, магазины с интеграцией баз данных.",
       icon: Globe,
       gradient: "from-purple-500/20 to-transparent"
     }
@@ -1328,31 +1328,31 @@ const WorkProcess = () => {
     {
       icon: Search,
       title: "Анализ ТЗ",
-      description: "Изучаем ваши требования, анализируем конкурентов, составляем техническое задание.",
+      description: "Детально изучаем ваши требования, анализируем конкурентов и составляем техническое задание с учетом всех нюансов.",
       duration: "1 день"
     },
     {
       icon: FileText,
       title: "Прототип",
-      description: "Создаем архитектуру, проектируем базы данных, показываем первые результаты.",
+      description: "Разрабатываем архитектуру проекта, проектируем структуру баз данных и показываем первые рабочие результаты.",
       duration: "2-3 дня"
     },
     {
       icon: Code,
       title: "Разработка",
-      description: "Пишем чистый код, оптимизируем производительность, реализуем все фичи.",
+      description: "Пишем чистый и оптимизированный код, следуя лучшим практикам. Реализуем все функции согласно ТЗ.",
       duration: "1-4 недели"
     },
     {
       icon: CheckCircle,
       title: "Тестирование",
-      description: "Ищем баги, проводим стресс-тесты, проверяем на реальных игроках.",
+      description: "Проводим комплексное тестирование: поиск багов, стресс-тесты производительности, проверка на реальных игроках.",
       duration: "3-5 дней"
     },
     {
       icon: Rocket,
       title: "Запуск",
-      description: "Запускаем проект, настраиваем мониторинг, обеспечиваем поддержку 24/7.",
+      description: "Разворачиваем проект на вашем сервере, настраиваем мониторинг и обеспечиваем техническую поддержку 24/7.",
       duration: "Поддержка"
     }
   ];
@@ -1586,37 +1586,37 @@ const Portfolio = () => {
   const projects = [
     {
       title: "Etheria RPG",
-      description: "Масштабный RPG мир с 50+ уникальными классами. Онлайн 500+ игроков одновременно.",
+      description: "Масштабный MMORPG мир с 50+ уникальными классами и прокачкой. Стабильный онлайн 500+ игроков без лагов и вылетов.",
       tags: ["MMORPG", "Plugins", "Paper"],
       image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop"
     },
     {
       title: "Hardcore Survival",
-      description: "Выживание для хардкорщиков. Температура, жажда, реалистичная физика. Сложность максимум.",
+      description: "Реалистичное выживание с системой температуры, жажды и голода. Физика блоков, сезоны и динамическая погода.",
       tags: ["Modding", "Forge", "Survival"],
       image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop"
     },
     {
       title: "SkyBlock Advanced",
-      description: "SkyBlock нового поколения. Автоматизация, кастомные острова, 100+ достижений.",
+      description: "SkyBlock с автоматизацией ресурсов, генератором островов и системой достижений. 100+ уникальных челленджей.",
       tags: ["SkyBlock", "Automation", "Spigot"],
       image: "https://images.unsplash.com/photo-1614728263952-84ea206f99b6?q=80&w=800&auto=format&fit=crop"
     },
     {
       title: "PvP Arena Pro",
-      description: "Турнирная система с ELO рейтингом. Автоматические матчи, статистика, награды.",
+      description: "Турнирная PvP система с ELO рейтингом и матчмейкингом. Детальная статистика боев и система наград.",
       tags: ["PvP", "System", "Plugin"],
       image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=800&auto=format&fit=crop"
     },
     {
       title: "BlockEco",
-      description: "Полноценная экономика. Банки, биржа, акции, налоги. Как в реальном мире.",
+      description: "Комплексная экономическая система с банками, биржей и налогообложением. Реалистичная торговля между игроками.",
       tags: ["Economy", "Database", "Plugin"],
       image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop"
     },
     {
       title: "Dungeon Master",
-      description: "Бесконечные подземелья с процедурной генерацией. 20+ боссов, легендарный лут.",
+      description: "Процедурная генерация подземелий с уникальными боссами. 20+ типов врагов, легендарный лут и система прогрессии.",
       tags: ["Generation", "Mod", "Fabric"],
       image: "https://images.unsplash.com/photo-1627389955609-bc015e2a2202?q=80&w=800&auto=format&fit=crop"
     }
@@ -2027,10 +2027,10 @@ const CTA = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
           <div className="relative z-10">
             <h2 className="text-5xl md:text-8xl font-black mb-12 tracking-tighter uppercase leading-[0.9]">
-              ГОТОВЫ ЗАПУСТИТЬ <br /> <span className="text-primary text-glow-strong">СВОЙ СЕРВЕР?</span>
+              ГОТОВЫ ЗАПУСТИТЬ <br /> <span className="text-primary text-glow-strong">СВОЙ ПРОЕКТ?</span>
             </h2>
             <p className="text-xl md:text-3xl text-gray-400 mb-20 max-w-3xl mx-auto font-medium">
-              Не откладывайте на завтра то, что может приносить доход уже сегодня.
+              Начните зарабатывать на своем сервере уже через неделю. Первая консультация бесплатно.
             </p>
             <Button 
               onClick={onOpenOrder}
