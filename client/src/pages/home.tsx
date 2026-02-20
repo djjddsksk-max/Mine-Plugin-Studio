@@ -107,6 +107,7 @@ export default function Home() {
       <Navbar onOpenOrder={() => setIsOrderModalOpen(true)} />
       <main>
         <Hero onOpenOrder={() => setIsOrderModalOpen(true)} />
+        <Stats />
         <Services />
         <Portfolio />
         <Pricing onOpenOrder={() => setIsOrderModalOpen(true)} />
@@ -273,6 +274,77 @@ const Hero = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
         </div>
       </div>
     </section>
+  );
+};
+
+const Stats = () => {
+  const stats = [
+    { label: "Проектов завершено", value: 150, suffix: "+" },
+    { label: "Довольных клиентов", value: 50, suffix: "+" },
+    { label: "Время работы", value: 99.9, suffix: "%" },
+    { label: "Техподдержка", value: "24/7", suffix: "" },
+  ];
+
+  return (
+    <section className="py-20 bg-background relative overflow-hidden">
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {stats.map((stat, idx) => (
+            <StatItem key={idx} stat={stat} delay={idx * 0.1} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const StatItem = ({ stat, delay }: { stat: any; delay: number }) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  useEffect(() => {
+    if (isInView) {
+      if (typeof stat.value === "number") {
+        let start = 0;
+        const end = stat.value;
+        const duration = 2000;
+        const increment = end / (duration / 16);
+        
+        const timer = setInterval(() => {
+          start += increment;
+          if (start >= end) {
+            setCount(end);
+            clearInterval(timer);
+          } else {
+            setCount(start);
+          }
+        }, 16);
+        return () => clearInterval(timer);
+      }
+    }
+  }, [isInView, stat.value]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ delay, duration: 0.8 }}
+      className="relative group"
+    >
+      <div className="glass-premium p-8 rounded-3xl border border-white/5 text-center transition-all duration-500 group-hover:border-primary/50 group-hover:shadow-[0_0_30px_rgba(57,255,20,0.15)] group-hover:-translate-y-2">
+        <div className="text-4xl md:text-5xl font-black text-white mb-2 tracking-tighter">
+          <span className="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent group-hover:from-primary group-hover:to-green-400 transition-all duration-500">
+            {typeof stat.value === "number" ? (stat.value % 1 === 0 ? Math.floor(count) : count.toFixed(1)) : stat.value}
+            {stat.suffix}
+          </span>
+        </div>
+        <div className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-gray-500 group-hover:text-primary/80 transition-colors duration-500">
+          {stat.label}
+        </div>
+      </div>
+    </motion.div>
   );
 };
 
