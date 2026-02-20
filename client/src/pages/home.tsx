@@ -435,31 +435,31 @@ const WorkProcess = () => {
     {
       icon: Search,
       title: "Анализ ТЗ",
-      description: "Глубокое погружение в ваши требования, изучение механик и составление детального плана реализации.",
+      description: "Изучаем ваши требования, анализируем конкурентов, составляем техническое задание.",
       duration: "1 день"
     },
     {
       icon: FileText,
       title: "Прототип",
-      description: "Создание архитектуры проекта, проектирование баз данных и основных API-интерфейсов.",
+      description: "Создаем архитектуру, проектируем базы данных, показываем первые результаты.",
       duration: "2-3 дня"
     },
     {
       icon: Code,
       title: "Разработка",
-      description: "Написание чистого и оптимизированного кода, реализация всех игровых систем и механик.",
+      description: "Пишем чистый код, оптимизируем производительность, реализуем все фичи.",
       duration: "1-4 недели"
     },
     {
       icon: CheckCircle,
       title: "Тестирование",
-      description: "Тщательная проверка на баги, стресс-тесты производительности и полировка игрового процесса.",
+      description: "Ищем баги, проводим стресс-тесты, проверяем на реальных игроках.",
       duration: "3-5 дней"
     },
     {
       icon: Rocket,
       title: "Запуск",
-      description: "Развертывание проекта, финальная настройка и долгосрочная техническая поддержка.",
+      description: "Запускаем проект, настраиваем мониторинг, обеспечиваем поддержку 24/7.",
       duration: "Поддержка"
     }
   ];
@@ -555,37 +555,37 @@ const Portfolio = () => {
   const projects = [
     {
       title: "Etheria RPG",
-      description: "Глобальный RPG сервер с уникальной системой прокачки и кастомными монстрами.",
+      description: "Масштабный RPG мир с 50+ уникальными классами. Онлайн 500+ игроков одновременно.",
       tags: ["MMORPG", "Plugins", "Paper"],
       image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop"
     },
     {
       title: "Hardcore Survival",
-      description: "Модпак для выживания в экстремальных условиях с новыми механиками температуры.",
+      description: "Выживание для хардкорщиков. Температура, жажда, реалистичная физика. Сложность максимум.",
       tags: ["Modding", "Forge", "Survival"],
       image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop"
     },
     {
       title: "SkyBlock Advanced",
-      description: "Улучшенный SkyBlock с автоматизацией и кастомными островами.",
+      description: "SkyBlock нового поколения. Автоматизация, кастомные острова, 100+ достижений.",
       tags: ["SkyBlock", "Automation", "Spigot"],
       image: "https://images.unsplash.com/photo-1614728263952-84ea206f99b6?q=80&w=800&auto=format&fit=crop"
     },
     {
       title: "PvP Arena Pro",
-      description: "Плагин для автоматизации турниров и рейтинговых боев.",
+      description: "Турнирная система с ELO рейтингом. Автоматические матчи, статистика, награды.",
       tags: ["PvP", "System", "Plugin"],
       image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=800&auto=format&fit=crop"
     },
     {
       title: "BlockEco",
-      description: "Экономическая система с рынком, акциями и банковской системой.",
+      description: "Полноценная экономика. Банки, биржа, акции, налоги. Как в реальном мире.",
       tags: ["Economy", "Database", "Plugin"],
       image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop"
     },
     {
       title: "Dungeon Master",
-      description: "Генератор процедурных подземелий с боссами и лутом.",
+      description: "Бесконечные подземелья с процедурной генерацией. 20+ боссов, легендарный лут.",
       tags: ["Generation", "Mod", "Fabric"],
       image: "https://images.unsplash.com/photo-1627389955609-bc015e2a2202?q=80&w=800&auto=format&fit=crop"
     }

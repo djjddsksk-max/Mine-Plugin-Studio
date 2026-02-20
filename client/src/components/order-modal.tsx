@@ -147,7 +147,7 @@ export function OrderModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
                                   <SelectValue placeholder="Выберите тип" />
                                 </SelectTrigger>
                               </FormControl>
-                              <SelectContent className="bg-[#0a0a0a] border-white/10">
+                              <SelectContent className="bg-[#0a0a0a] border-white/10 z-[250]">
                                 <SelectItem value="plugin">Плагин</SelectItem>
                                 <SelectItem value="mod">Мод</SelectItem>
                                 <SelectItem value="server">Сервер</SelectItem>
@@ -169,7 +169,7 @@ export function OrderModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
                                   <SelectValue placeholder="Бюджет" />
                                 </SelectTrigger>
                               </FormControl>
-                              <SelectContent className="bg-[#0a0a0a] border-white/10">
+                              <SelectContent className="bg-[#0a0a0a] border-white/10 z-[250]">
                                 <SelectItem value="low">До 25к</SelectItem>
                                 <SelectItem value="medium">25-50к</SelectItem>
                                 <SelectItem value="high">50-100к</SelectItem>
