@@ -140,7 +140,11 @@ const Hero = () => {
           >
             <div className="inline-flex items-center gap-3 px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl bg-primary/5 border border-primary/10 mb-8 md:mb-12 backdrop-blur-3xl animate-float-3d">
               <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-primary" />
+<<<<<<< HEAD
               <span className="text-[10px] md:text-sm font-bold uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary/80">Профессиональная разработка для Minecraft</span>
+=======
+              <span className="text-[10px] md:text-sm font-bold uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary/80">Виртуальный Архитектор Нового Поколения</span>
+>>>>>>> 2d254d850af0f50732e363bb685c4c1a7f1ec721
             </div>
             
             <h1 className="text-4xl sm:text-6xl md:text-[8rem] font-bold font-display mb-8 md:mb-12 leading-[1.1] tracking-tight preserve-3d">
@@ -158,7 +162,11 @@ const Hero = () => {
                 transition={{ delay: 0.7, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                 className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-green-400 to-secondary text-glow-strong hover:brightness-125 transition-all duration-700 ease-in-out cursor-default"
               >
+<<<<<<< HEAD
                 СЕРВЕРЫ
+=======
+                МИРЫ
+>>>>>>> 2d254d850af0f50732e363bb685c4c1a7f1ec721
               </motion.span>
             </h1>
             
@@ -168,7 +176,11 @@ const Hero = () => {
               transition={{ delay: 1, duration: 1.5 }}
               className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-20 leading-relaxed font-medium tracking-normal hover:text-white transition-colors duration-700 ease-in-out"
             >
+<<<<<<< HEAD
               Разрабатываем уникальные плагины, моды и серверы для Minecraft. <br className="hidden md:block" /> От простых механик до сложных игровых систем.
+=======
+              Мы создаем сложные технические шедевры внутри Minecraft, <br className="hidden md:block" /> где каждый блок — это безупречный код.
+>>>>>>> 2d254d850af0f50732e363bb685c4c1a7f1ec721
             </motion.p>
 
             <motion.div 
@@ -248,6 +260,7 @@ const Services = () => {
           className="grid lg:grid-cols-2 gap-24 items-end mb-40"
         >
           <div className="relative z-10">
+<<<<<<< HEAD
             <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.2em] font-bold uppercase hover:bg-primary/20 transition-all duration-500 cursor-default">Наши услуги</Badge>
             <h2 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight uppercase relative z-10 hover:text-primary transition-all duration-700 ease-in-out cursor-default group/title">
               ДЕЛАЕМ ВАШ <br /> <span className="text-gray-800/30 group-hover/title:text-gray-700/50 transition-all duration-700 ease-in-out">ПРОЕКТ</span>
@@ -255,13 +268,28 @@ const Services = () => {
           </div>
           <p className="text-lg md:text-xl text-gray-400 font-medium leading-relaxed max-w-md relative z-20 hover:text-white transition-all duration-700 ease-in-out">
             Создаем плагины, моды и серверы любой сложности. От RPG-систем до мини-игр.
+=======
+            <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.2em] font-bold uppercase hover:bg-primary/20 transition-all duration-500 cursor-default">Наши Возможности</Badge>
+            <h2 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight uppercase relative z-10 hover:text-primary transition-all duration-700 ease-in-out cursor-default group/title">
+              МЫ СОЗДАЕМ <br /> <span className="text-gray-800/30 group-hover/title:text-gray-700/50 transition-all duration-700 ease-in-out">НЕВОЗМОЖНОЕ</span>
+            </h2>
+          </div>
+          <p className="text-lg md:text-xl text-gray-400 font-medium leading-relaxed max-w-md relative z-20 hover:text-white transition-all duration-700 ease-in-out">
+            От кастомных JVM-оптимизаций до нейронных сетей внутри игровых движков. Мы не знаем границ.
+>>>>>>> 2d254d850af0f50732e363bb685c4c1a7f1ec721
           </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-12 relative z-10">
+<<<<<<< HEAD
           <FeatureCard icon={Cpu} title="Плагины" description="Разработка кастомных плагинов для Bukkit, Spigot, Paper. От простых команд до сложных игровых механик." delay={0.1} />
           <FeatureCard icon={Layers} title="Моды" description="Создание модов для Forge и Fabric. Новые блоки, предметы, измерения и игровые системы." delay={0.2} />
           <FeatureCard icon={ShieldCheck} title="Серверы" description="Настройка и оптимизация серверов. Защита от читеров, настройка производительности." delay={0.3} />
+=======
+          <FeatureCard icon={Cpu} title="Ядро Системы" description="Разработка нативных плагинов с прямым доступом к памяти для экстремальной производительности." delay={0.1} />
+          <FeatureCard icon={Layers} title="Логика Модов" description="Сложные многоуровневые моды, интегрирующие внешние API и кастомные рендеры." delay={0.2} />
+          <FeatureCard icon={ShieldCheck} title="Защита Системы" description="Квантово-устойчивая защита игровых данных и транзакций внутри вашего сервера." delay={0.3} />
+>>>>>>> 2d254d850af0f50732e363bb685c4c1a7f1ec721
         </div>
       </div>
     </section>
@@ -279,7 +307,11 @@ const Footer = () => {
                 <span className="text-5xl font-bold font-display tracking-tightest">BLOCKFORGE</span>
               </div>
               <p className="text-2xl text-gray-500 max-w-lg font-medium tracking-tight">
+<<<<<<< HEAD
                 Профессиональная разработка для Minecraft. <br /> Создано с любовью к игре.
+=======
+                Инженерия Цифровой Вечности. <br /> Создано элитой для визионеров.
+>>>>>>> 2d254d850af0f50732e363bb685c4c1a7f1ec721
               </p>
            </div>
            <div className="flex flex-wrap justify-center gap-12 md:gap-24">
@@ -290,10 +322,17 @@ const Footer = () => {
         </div>
         
         <div className="pt-20 border-t border-white/5 flex flex-col md:row justify-between items-center gap-10">
+<<<<<<< HEAD
           <span className="text-gray-700 font-bold uppercase tracking-[1em] text-[12px]">© 2026 BLOCKFORGE</span>
           <div className="flex gap-12 text-gray-700 font-bold uppercase tracking-widest text-[12px]">
              <a href="#" className="hover:text-white transition-colors">Политика конфиденциальности</a>
              <a href="#" className="hover:text-white transition-colors">Условия использования</a>
+=======
+          <span className="text-gray-700 font-bold uppercase tracking-[1em] text-[12px]">© 2026 BLOCKFORGE // THE_APEX_ENGINE</span>
+          <div className="flex gap-12 text-gray-700 font-bold uppercase tracking-widest text-[12px]">
+             <a href="#" className="hover:text-white transition-colors">Политика безопасности</a>
+             <a href="#" className="hover:text-white transition-colors">Правовая информация</a>
+>>>>>>> 2d254d850af0f50732e363bb685c4c1a7f1ec721
           </div>
         </div>
       </div>
@@ -359,9 +398,15 @@ export default function Home() {
         >
           <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
           <div className="relative z-10">
+<<<<<<< HEAD
             <h2 className="text-4xl md:text-[12rem] font-bold mb-8 md:mb-16 tracking-tightest leading-none uppercase">ГОТОВЫ <br /> <span className="text-primary">НАЧАТЬ?</span></h2>
             <Button size="xl" className="w-full md:w-auto bg-primary text-black hover:bg-white font-bold text-2xl md:text-4xl px-10 md:px-20 h-20 md:h-32 rounded-2xl md:rounded-[40px] shadow-[0_30px_100px_rgba(57,255,20,0.5)] transition-all transform hover:-translate-y-4">
               ОБСУДИТЬ ПРОЕКТ
+=======
+            <h2 className="text-4xl md:text-[12rem] font-bold mb-8 md:mb-16 tracking-tightest leading-none uppercase">ГОТОВЫ <br /> <span className="text-primary">ВЗЛЕТАТЬ?</span></h2>
+            <Button size="xl" className="w-full md:w-auto bg-primary text-black hover:bg-white font-bold text-2xl md:text-4xl px-10 md:px-20 h-20 md:h-32 rounded-2xl md:rounded-[40px] shadow-[0_30px_100px_rgba(57,255,20,0.5)] transition-all transform hover:-translate-y-4">
+              СВЯЗАТЬСЯ С НАМИ
+>>>>>>> 2d254d850af0f50732e363bb685c4c1a7f1ec721
             </Button>
           </div>
         </motion.div>
