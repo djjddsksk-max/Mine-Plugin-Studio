@@ -32,6 +32,14 @@ import {
   Shield,
   Server
 } from "lucide-react";
+import { 
+  ResponsiveContainer, 
+  AreaChart, 
+  Area, 
+  Tooltip, 
+  XAxis, 
+  YAxis 
+} from "recharts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -180,6 +188,7 @@ export default function Home() {
       <main>
         <Hero onOpenOrder={() => setIsOrderModalOpen(true)} />
         <Stats />
+        <ResultsSection />
         <Achievements />
         <Services />
         <TechSection />
@@ -370,6 +379,203 @@ const PriceCalculator = ({ onOrder }: { onOrder: (data: any) => void }) => {
         </div>
       </div>
     </section>
+  );
+};
+
+const ResultsSection = () => {
+  const results = [
+    {
+      title: "Производительность сервера",
+      before: 45,
+      after: 98,
+      unit: "TPS/FPS",
+      description: "Оптимизация ядра и алгоритмов обработки данных",
+      data: [
+        { name: "1", before: 40, after: 85 },
+        { name: "2", before: 35, after: 90 },
+        { name: "3", before: 45, after: 95 },
+        { name: "4", before: 30, after: 98 },
+      ]
+    },
+    {
+      title: "Онлайн игроков",
+      before: 120,
+      after: 850,
+      unit: "Игроков",
+      description: "Масштабируемая архитектура и минимизация задержек",
+      data: [
+        { name: "1", before: 100, after: 300 },
+        { name: "2", before: 110, after: 550 },
+        { name: "3", before: 125, after: 720 },
+        { name: "4", before: 120, after: 850 },
+      ]
+    },
+    {
+      title: "Скорость загрузки",
+      before: 12,
+      after: 1.5,
+      unit: "сек",
+      description: "Асинхронная подгрузка ресурсов и сжатие пакетов",
+      inverse: true,
+      data: [
+        { name: "1", before: 15, after: 5 },
+        { name: "2", before: 13, after: 3 },
+        { name: "3", before: 14, after: 2 },
+        { name: "4", before: 12, after: 1.5 },
+      ]
+    }
+  ];
+
+  return (
+    <section className="py-40 bg-[#050505] relative overflow-hidden border-y border-white/5">
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="text-center mb-24">
+          <Badge className="bg-primary/10 text-primary border-primary/20 mb-6 px-6 py-2 text-sm rounded-xl tracking-widest uppercase">Результаты</Badge>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase mb-6">Доказанная эффективность</h2>
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto">Реальные показатели проектов после внедрения наших решений</p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-12">
+          {results.map((item, idx) => (
+            <ResultCard key={idx} item={item} index={idx} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ResultCard = ({ item, index }: { item: any, index: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+      animate={isInView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.8, delay: index * 0.2 }}
+      className="glass-premium rounded-[32px] border border-white/5 p-8 md:p-12 overflow-hidden relative group"
+    >
+      <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] rounded-full -mr-32 -mt-32 group-hover:bg-primary/10 transition-colors duration-700" />
+      
+      <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h3 className="text-3xl md:text-4xl font-bold mb-4 uppercase tracking-tighter">{item.title}</h3>
+          <p className="text-gray-400 text-lg mb-8">{item.description}</p>
+          
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-2">
+              <span className="text-xs uppercase tracking-widest text-gray-500 font-bold">До вмешательства</span>
+              <div className="flex items-baseline gap-2">
+                <Counter value={item.before} isInView={isInView} className="text-4xl md:text-5xl font-black text-red-500" />
+                <span className="text-gray-500 font-bold">{item.unit}</span>
+              </div>
+              <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                <motion.div 
+                  initial={{ width: 0 }}
+                  animate={isInView ? { width: "100%" } : {}}
+                  transition={{ duration: 1.5, delay: 0.5 }}
+                  className="h-full bg-red-500/50"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <span className="text-xs uppercase tracking-widest text-primary font-bold">После UnoStudio</span>
+              <div className="flex items-baseline gap-2">
+                <Counter value={item.after} isInView={isInView} className="text-4xl md:text-5xl font-black text-primary text-glow" />
+                <span className="text-primary/70 font-bold">{item.unit}</span>
+              </div>
+              <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                <motion.div 
+                  initial={{ width: 0 }}
+                  animate={isInView ? { width: "100%" } : {}}
+                  transition={{ duration: 1.5, delay: 0.8 }}
+                  className="h-full bg-primary shadow-[0_0_10px_#39ff14]"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-10 flex items-center gap-4">
+            <div className={`px-4 py-2 rounded-xl font-bold text-sm uppercase tracking-tighter ${item.inverse ? 'bg-red-500/10 text-red-500' : 'bg-primary/10 text-primary'}`}>
+              {item.inverse ? '-' : '+'}{Math.abs(Math.round(((item.after - item.before) / item.before) * 100))}% Эффективности
+            </div>
+          </div>
+        </div>
+
+        <div className="h-[250px] w-full bg-white/5 rounded-3xl p-6 border border-white/10 relative overflow-hidden">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={item.data}>
+              <defs>
+                <linearGradient id={`gradBefore-${index}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                </linearGradient>
+                <linearGradient id={`gradAfter-${index}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#39ff14" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#39ff14" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
+                itemStyle={{ fontWeight: 'bold' }}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="before" 
+                stroke="#ef4444" 
+                strokeWidth={3}
+                fillOpacity={1} 
+                fill={`url(#gradBefore-${index})`} 
+                animationDuration={2000}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="after" 
+                stroke="#39ff14" 
+                strokeWidth={4}
+                fillOpacity={1} 
+                fill={`url(#gradAfter-${index})`} 
+                animationDuration={2500}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const Counter = ({ value, isInView, className }: { value: number, isInView: boolean, className?: string }) => {
+  const [count, setCount] = useState(0);
+  
+  useEffect(() => {
+    if (isInView) {
+      let start = 0;
+      const end = value;
+      const duration = 2000;
+      const increment = end / (duration / 16);
+      
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= end) {
+          setCount(end);
+          clearInterval(timer);
+        } else {
+          setCount(start);
+        }
+      }, 16);
+      
+      return () => clearInterval(timer);
+    }
+  }, [value, isInView]);
+
+  return (
+    <span className={className}>
+      {Number.isInteger(value) ? Math.floor(count) : count.toFixed(1)}
+    </span>
   );
 };
 
