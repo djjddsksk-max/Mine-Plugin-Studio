@@ -205,7 +205,7 @@ const Navbar = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
           <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center transform group-hover:rotate-[360deg] transition-transform duration-1000 shadow-[0_0_30px_rgba(57,255,20,0.3)]">
             <Terminal className="text-black w-7 h-7" />
           </div>
-          <span className="text-2xl font-bold font-display tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">BLOCK<span className="text-primary">FORGE</span></span>
+          <span className="text-2xl font-bold font-display tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Uno<span className="text-primary">Studio</span></span>
         </motion.div>
 
         <div className="hidden md:flex items-center gap-6">
@@ -292,17 +292,17 @@ const Hero = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
                 initial={{ y: 100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.5, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                className="block text-white hover:text-primary transition-colors duration-700 ease-in-out cursor-default"
+                className="block text-white hover:text-primary transition-colors duration-700 ease-in-out cursor-default uppercase"
               >
-                СОЗДАЕМ
+                Uno
               </motion.span>
               <motion.span 
                 initial={{ y: 100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.7, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-green-400 to-secondary text-glow-strong hover:brightness-125 transition-all duration-700 ease-in-out cursor-default"
+                className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-green-400 to-secondary text-glow-strong hover:brightness-125 transition-all duration-700 ease-in-out cursor-default uppercase"
               >
-                СЕРВЕРЫ
+                Studio
               </motion.span>
             </h1>
             
@@ -1136,11 +1136,11 @@ const Contact = () => {
               <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
                 <Terminal className="text-black w-6 h-6" />
               </div>
-              <span className="text-xl font-bold tracking-tighter">BLOCKFORGE</span>
+              <span className="text-xl font-bold tracking-tighter">UnoStudio</span>
             </div>
             <p className="text-gray-500 max-w-sm mb-12">Профессиональная разработка для Minecraft. Создаем серверы, плагины и моды мирового уровня.</p>
             <div className="flex gap-4">
-              {[Github, Twitter, MessageCircle].map((Icon, i) => (
+              {[Github, Twitter, MessageSquare].map((Icon, i) => (
                 <Button key={i} size="icon" variant="outline" className="rounded-xl border-white/10 hover:border-primary/50 hover:text-primary">
                   <Icon size={20} />
                 </Button>
@@ -1158,8 +1158,8 @@ const Contact = () => {
           <div>
             <h4 className="font-bold uppercase tracking-widest text-xs mb-8 text-primary">Контакты</h4>
             <ul className="space-y-4 text-gray-500">
-              <li className="flex items-center gap-3"><MessageCircle size={16} /> @blockforge_dev</li>
-              <li className="flex items-center gap-3"><Globe size={16} /> blockforge.studio</li>
+              <li className="flex items-center gap-3"><MessageSquare size={16} /> @unostudio_dev</li>
+              <li className="flex items-center gap-3"><Globe size={16} /> unostudio.io</li>
               <li className="flex items-center gap-3"><Clock size={16} /> 24/7 Поддержка</li>
             </ul>
           </div>
@@ -1173,7 +1173,7 @@ const Footer = () => {
   return (
     <footer className="py-12 border-t border-white/5 bg-black/60">
       <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-        <p className="text-gray-500 text-xs font-bold tracking-[0.2em] uppercase">© 2026 BLOCKFORGE STUDIO. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</p>
+        <p className="text-gray-500 text-xs font-bold tracking-[0.2em] uppercase">© 2026 UNOSTUDIO. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</p>
         <div className="flex gap-12">
           <a href="#" className="text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:text-primary transition-colors">Политика конфиденциальности</a>
           <a href="#" className="text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:text-primary transition-colors">Условия использования</a>

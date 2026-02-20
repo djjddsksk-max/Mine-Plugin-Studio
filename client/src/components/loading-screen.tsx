@@ -60,7 +60,6 @@ const LoadingScreen = ({ onLoadingComplete }: { onLoadingComplete: () => void })
           />
         </div>
 
-        {/* BLOCKFORGE Text */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -72,7 +71,7 @@ const LoadingScreen = ({ onLoadingComplete }: { onLoadingComplete: () => void })
             animate={{ letterSpacing: ["0.3em", "0.5em"] }}
             transition={{ duration: 2, delay: 2.8 }}
           >
-            BLOCK<span className="text-[#39ff14] drop-shadow-[0_0_12px_rgba(57,255,20,0.8)]">FORGE</span>
+            Uno<span className="text-[#39ff14] drop-shadow-[0_0_12px_rgba(57,255,20,0.8)]">Studio</span>
           </motion.h2>
           
           <motion.div
