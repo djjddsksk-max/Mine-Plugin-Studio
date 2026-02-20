@@ -1,0 +1,24 @@
+{
+  "enabled": true,
+  "name": "Auto Git Commit",
+  "description": "Автоматически добавляет и коммитит изменения в Git при редактировании файлов",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "*.tsx",
+      "*.ts",
+      "*.js",
+      "*.jsx",
+      "*.json",
+      "*.css",
+      "*.html",
+      "*.md"
+    ]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "git add . && git commit -m \"Auto-commit: Updated files\" && git push origin main",
+    "timeout": 30
+  }
+}

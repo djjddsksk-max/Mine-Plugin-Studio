@@ -168,7 +168,7 @@ const Hero = () => {
               transition={{ delay: 1, duration: 1.5 }}
               className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-20 leading-relaxed font-medium tracking-normal hover:text-white transition-colors duration-700 ease-in-out"
             >
-              Разрабатываем уникальные плагины, моды и серверы для Minecraft. <br className="hidden md:block" /> От простых механик до сложных игровых систем.
+              Создаем серверы мечты для 1000+ игроков. <br className="hidden md:block" /> Плагины, которые меняют игру навсегда.
             </motion.p>
 
             <motion.div 
@@ -254,14 +254,14 @@ const Services = () => {
             </h2>
           </div>
           <p className="text-lg md:text-xl text-gray-400 font-medium leading-relaxed max-w-md relative z-20 hover:text-white transition-all duration-700 ease-in-out">
-            Создаем плагины, моды и серверы любой сложности. От RPG-систем до мини-игр.
+            Превращаем идеи в код. Каждый проект - это технический шедевр.
           </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-12 relative z-10">
-          <FeatureCard icon={Cpu} title="Плагины" description="Разработка кастомных плагинов для Bukkit, Spigot, Paper. От простых команд до сложных игровых механик." delay={0.1} />
-          <FeatureCard icon={Layers} title="Моды" description="Создание модов для Forge и Fabric. Новые блоки, предметы, измерения и игровые системы." delay={0.2} />
-          <FeatureCard icon={ShieldCheck} title="Серверы" description="Настройка и оптимизация серверов. Защита от читеров, настройка производительности." delay={0.3} />
+          <FeatureCard icon={Cpu} title="Плагины" description="Плагины, которые меняют игру. От экономики до PvP систем. Производительность на первом месте." delay={0.1} />
+          <FeatureCard icon={Layers} title="Моды" description="Новые миры возможностей. Кастомные блоки, мобы, измерения. Совместимость гарантирована." delay={0.2} />
+          <FeatureCard icon={ShieldCheck} title="Серверы" description="Серверы для тысяч игроков. Защита от лагов и читеров. Стабильность 99.9%." delay={0.3} />
         </div>
       </div>
     </section>
@@ -278,13 +278,13 @@ const Portfolio = () => {
     },
     {
       title: "Hardcore Survival",
-      description: "Модпак для выживания в экстремальных условиях с новыми механиками температуры.",
+      description: "Выживание для настоящих хардкорщиков. Температура, жажда, реалистичная физика.",
       tags: ["Modding", "Forge", "Survival"],
       image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop"
     },
     {
       title: "SkyBlock Advanced",
-      description: "Улучшенный SkyBlock с автоматизацией и кастомными островами.",
+      description: "SkyBlock нового поколения. Автоматизация, кастомные острова, бесконечные возможности.",
       tags: ["SkyBlock", "Automation", "Spigot"],
       image: "https://images.unsplash.com/photo-1614728263952-84ea206f99b6?q=80&w=800&auto=format&fit=crop"
     },
@@ -400,7 +400,7 @@ const Pricing = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="mb-40 text-right"
+          className="mb-40 text-center"
         >
           <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.2em] font-bold uppercase hover:bg-primary/20 transition-all duration-500 cursor-default">Тарифы</Badge>
           <h2 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight uppercase hover:text-primary transition-all duration-700 ease-in-out cursor-default">
@@ -502,9 +502,9 @@ const Team = () => {
 
 const FAQ = () => {
   const items = [
-    { q: "Какие версии Minecraft вы поддерживаете?", a: "Мы работаем со всеми актуальными версиями от 1.8.8 до самых последних снапшотов 1.21+." },
-    { q: "Сколько времени занимает разработка?", a: "Простые плагины от 3 дней, полноценные серверы от 2 недель до нескольких месяцев." },
-    { q: "Предоставляете ли вы исходный код?", a: "Да, по завершении проекта мы передаем все исходные файлы и документацию." }
+    { q: "Какие версии Minecraft поддерживаете?", a: "Работаем со всеми версиями от 1.8.8 до последних снапшотов 1.21+. Оптимизируем под вашу аудиторию." },
+    { q: "Сколько стоит разработка плагина?", a: "Простые плагины от 15,000₽, сложные системы от 45,000₽. Точная цена после анализа ТЗ." },
+    { q: "Даете ли гарантию на работу?", a: "Да! 6 месяцев гарантии на все проекты. Исправляем баги бесплатно, обновляем под новые версии." }
   ];
 
   return (
