@@ -4,7 +4,7 @@ import { Music, Play, Pause, Volume2, X, Minimize2 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 
 export function MusicPlayer() {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true); // Start expanded
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(() => {
     const saved = localStorage.getItem("music-volume");
@@ -24,6 +24,12 @@ export function MusicPlayer() {
   useEffect(() => {
     if (audioRef.current && isVisible) {
       audioRef.current.volume = volume;
+      // Auto-play music when component becomes visible
+      audioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => {
+          console.log("Autoplay blocked, user interaction needed:", err);
+        });
     }
   }, [isVisible, volume]);
 
@@ -54,10 +60,15 @@ export function MusicPlayer() {
     
     // Auto-start music when expanding from minimized state
     if (wasMinimized && !isPlaying && audioRef.current) {
-      // Play immediately on user interaction (click)
       audioRef.current.play()
         .then(() => setIsPlaying(true))
         .catch((err) => console.log("Play failed:", err));
+    }
+    
+    // Pause when minimizing
+    if (!wasMinimized && isPlaying && audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
     }
   };
 
@@ -67,6 +78,7 @@ export function MusicPlayer() {
         ref={audioRef}
         src="/music/background.mp3"
         loop
+        autoPlay
         preload="auto"
         onError={(e) => console.error("Audio error:", e)}
         onLoadedData={() => console.log("Audio loaded")}
