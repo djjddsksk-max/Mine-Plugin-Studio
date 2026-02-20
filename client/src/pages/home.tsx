@@ -24,7 +24,9 @@ import {
   FileText,
   Code,
   CheckCircle,
-  Rocket
+  Rocket,
+  User,
+  Send
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -32,6 +34,7 @@ import { Badge } from "@/components/ui/badge";
 import { OrderModal } from "@/components/order-modal";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ChatWidget } from "@/components/chat-widget";
 
 const PerspectiveCard = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
   const x = useMotionValue(0);
@@ -189,6 +192,7 @@ export default function Home() {
         <CTA onOpenOrder={() => setIsOrderModalOpen(true)} />
       </main>
       <Footer />
+      <ChatWidget />
       <OrderModal 
         isOpen={isOrderModalOpen} 
         onClose={() => {
@@ -621,7 +625,21 @@ const Stats = () => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, idx) => (
-            <StatItem key={idx} stat={stat} delay={idx * 0.1} />
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              className="text-center p-8 rounded-3xl bg-white/5 border border-white/5 hover:border-primary/20 transition-all hover:bg-white/[0.07] group"
+            >
+              <div className="text-4xl md:text-6xl font-black text-white mb-2 tracking-tighter group-hover:text-primary transition-colors">
+                {stat.value}{stat.suffix}
+              </div>
+              <div className="text-xs md:text-sm uppercase tracking-widest font-bold text-gray-500 group-hover:text-gray-300 transition-colors">
+                {stat.label}
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -629,160 +647,66 @@ const Stats = () => {
   );
 };
 
-const StatItem = ({ stat, delay }: { stat: any; delay: number }) => {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-
-  useEffect(() => {
-    if (isInView && typeof stat.value === "number") {
-      const startTime = Date.now();
-      const duration = 2000;
-      const endValue = stat.value;
-
-      const updateCount = () => {
-        const now = Date.now();
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        // Easing function: easeOutExpo
-        const easeOutExpo = 1 - Math.pow(2, -10 * progress);
-        const currentValue = endValue * easeOutExpo;
-
-        setCount(currentValue);
-
-        if (progress < 1) {
-          requestAnimationFrame(updateCount);
-        } else {
-          setCount(endValue);
-        }
-      };
-
-      requestAnimationFrame(updateCount);
-    }
-  }, [isInView, stat.value]);
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
-      animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
-      transition={{ 
-        delay, 
-        duration: 1.2, 
-        ease: [0.16, 1, 0.3, 1] 
-      }}
-      className="relative group"
-    >
-      <div className="glass-premium p-8 rounded-3xl border border-white/5 text-center transition-all duration-500 group-hover:border-primary/50 group-hover:shadow-[0_0_30px_rgba(57,255,20,0.15)] group-hover:-translate-y-2">
-        <div className="text-4xl md:text-5xl font-black text-white mb-2 tracking-tighter">
-          <span className="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent group-hover:from-primary group-hover:to-green-400 transition-all duration-500">
-            {typeof stat.value === "number" ? (stat.value % 1 === 0 ? Math.floor(count) : count.toFixed(1)) : stat.value}
-            {stat.suffix}
-          </span>
-        </div>
-        <div className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-gray-500 group-hover:text-primary/80 transition-colors duration-500">
-          {stat.label}
-        </div>
-      </div>
-    </motion.div>
-  );
-};
-
-interface FeatureCardProps {
-  icon: LucideIcon;
-  title: string;
-  description: string;
-  delay: number;
-}
-
-const FeatureCard = ({ icon: Icon, title, description, delay }: FeatureCardProps) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 50, scale: 0.9, rotateX: 15 }}
-      animate={isInView ? { opacity: 1, y: 0, scale: 1, rotateX: 0 } : {}}
-      transition={{ 
-        delay: delay * 1.5, 
-        duration: 1.2, 
-        ease: [0.16, 1, 0.3, 1] 
-      }}
-      className="group perspective-1000"
-    >
-      <PerspectiveCard className="h-full">
-        <motion.div 
-          whileHover={{ 
-            scale: 1.03,
-            rotateY: 5,
-            rotateX: -5,
-            boxShadow: "0 0 40px rgba(57, 255, 20, 0.2)"
-          }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="glass-premium p-12 rounded-[40px] h-full relative group border border-white/5 hover:border-primary/50"
-        >
-          <div className="w-24 h-24 rounded-[30px] bg-primary/10 flex items-center justify-center mb-10 group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-500">
-            <Icon className="w-12 h-12 text-primary" />
-          </div>
-          <h3 className="text-3xl font-bold mb-6 tracking-tight group-hover:text-primary transition-all duration-700 ease-out">{title}</h3>
-          <p className="text-gray-400 text-lg leading-relaxed font-medium group-hover:text-gray-200 transition-colors">
-            {description}
-          </p>
-          <div className="mt-12 flex items-center gap-4 text-primary font-bold tracking-widest text-sm opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0">
-             СТАТУС: АКТИВЕН <ChevronRight className="w-4 h-4" />
-          </div>
-        </motion.div>
-      </PerspectiveCard>
-    </motion.div>
-  );
-};
-
 const Services = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const services = [
+    {
+      title: "Разработка плагинов",
+      description: "От простых утилит до сложнейших игровых механик на Spigot/Paper API.",
+      icon: Zap,
+      gradient: "from-primary/20 to-transparent"
+    },
+    {
+      title: "Создание модов",
+      description: "Глубокая модификация игры на Forge/Fabric для уникального геймплея.",
+      icon: Layers,
+      gradient: "from-secondary/20 to-transparent"
+    },
+    {
+      title: "Настройка серверов",
+      description: "Оптимизация, защита от DDOS и сборка под ключ для стабильной работы.",
+      icon: Cpu,
+      gradient: "from-blue-500/20 to-transparent"
+    },
+    {
+      title: "Системы экономики",
+      description: "Сложные банковские системы, торговые площадки и интеграция с БД.",
+      icon: Globe,
+      gradient: "from-purple-500/20 to-transparent"
+    }
+  ];
 
   return (
-    <section id="services" ref={ref} className="py-60 bg-background relative overflow-hidden">
-      <motion.div 
-        style={{ y: backgroundY }}
-        className="absolute inset-0 opacity-[0.03] pointer-events-none select-none flex items-center justify-center text-[20vw] font-black leading-none uppercase tracking-tighter"
-      >
-        SERVICES
-      </motion.div>
+    <section id="services" className="py-40 bg-background relative">
       <div className="container mx-auto px-6">
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="grid lg:grid-cols-2 gap-24 items-end mb-40"
-        >
-          <div className="relative z-10">
-            <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.2em] font-bold uppercase hover:bg-primary/20 transition-all duration-500 cursor-default">Наши услуги</Badge>
-            <motion.h2 
-              initial={{ filter: "blur(20px)", opacity: 0 }}
-              animate={isInView ? { filter: "blur(0px)", opacity: 1 } : {}}
-              transition={{ duration: 1.5, ease: "easeOut" }}
-              className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight uppercase relative z-10 hover:text-primary transition-all duration-700 ease-in-out cursor-default group/title"
-            >
-              ДЕЛАЕМ ВАШ <br /> <span className="text-gray-800/30 group-hover/title:text-gray-700/50 transition-all duration-700 ease-in-out">ПРОЕКТ</span>
-            </motion.h2>
-          </div>
-          <p className="text-lg md:text-xl text-gray-400 font-medium leading-relaxed max-w-md relative z-20 hover:text-white transition-all duration-700 ease-in-out">
-            Превращаем идеи в код. Каждый проект - это технический шедевр.
-          </p>
-        </motion.div>
+        <div className="text-center mb-24">
+          <Badge className="bg-primary/10 text-primary border-primary/20 mb-6 px-6 py-2 text-sm rounded-xl tracking-widest uppercase">Наши услуги</Badge>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase mb-6">Что мы <span className="text-primary">умеем</span></h2>
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto">Превращаем ваши идеи в стабильный и качественный код.</p>
+        </div>
 
-        <div className="grid lg:grid-cols-3 gap-12 relative z-10">
-          <FeatureCard icon={Cpu} title="Плагины" description="Разработка кастомных плагинов для Bukkit, Spigot, Paper. От простых команд до сложных игровых механик." delay={0.1} />
-          <FeatureCard icon={Layers} title="Моды" description="Создание модов для Forge и Fabric. Новые блоки, предметы, измерения и игровые системы." delay={0.2} />
-          <FeatureCard icon={ShieldCheck} title="Серверы" description="Настройка и оптимизация серверов. Защита от читеров, настройка производительности." delay={0.3} />
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {services.map((service, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+            >
+              <PerspectiveCard className="h-full">
+                <Card className={`bg-black/40 border-white/5 rounded-3xl h-full overflow-hidden group hover:border-primary/30 transition-all duration-500`}>
+                  <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
+                  <CardContent className="p-10 relative z-10">
+                    <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-primary mb-8 group-hover:scale-110 group-hover:rotate-6 transition-transform">
+                      <service.icon size={32} />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">{service.title}</h3>
+                    <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">{service.description}</p>
+                  </CardContent>
+                </Card>
+              </PerspectiveCard>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
@@ -866,66 +790,6 @@ const WorkProcess = () => {
         </div>
       </div>
     </section>
-  );
-};
-
-const ProcessStep = ({ step, index }: { step: any, index: number }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const isEven = index % 2 === 0;
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ 
-        opacity: 0, 
-        x: isEven ? -100 : 100,
-        filter: "blur(10px)"
-      }}
-      animate={isInView ? { 
-        opacity: 1, 
-        x: 0,
-        filter: "blur(0px)"
-      } : {}}
-      transition={{ 
-        duration: 1, 
-        ease: [0.16, 1, 0.3, 1],
-        delay: 0.2
-      }}
-      className={`relative flex flex-col md:flex-row items-center gap-12 group ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}
-    >
-      {/* Content Card */}
-      <div className={`w-full md:w-[42%] ${isEven ? 'md:text-right' : 'md:text-left'}`}>
-        <div className="glass-premium p-10 rounded-[40px] border border-white/5 hover:border-primary/30 transition-all duration-700 group">
-          <div className={`flex items-center gap-6 mb-6 ${isEven ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
-            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-black transition-all duration-700 shadow-[0_0_20px_rgba(57,255,20,0.1)] group-hover:shadow-[0_0_30px_rgba(57,255,20,0.4)]">
-              <step.icon size={32} />
-            </div>
-            <h3 className="text-3xl font-bold tracking-tight group-hover:text-primary transition-colors duration-500">{step.title}</h3>
-          </div>
-          <p className="text-gray-400 text-lg mb-8 leading-relaxed font-medium group-hover:text-gray-200 transition-colors duration-500">{step.description}</p>
-          <div className={`flex items-center gap-3 text-sm font-bold uppercase tracking-[0.2em] text-primary/60 group-hover:text-primary transition-colors duration-500 ${isEven ? 'md:justify-end' : 'md:justify-start'}`}>
-            <Clock size={16} />
-            {step.duration}
-          </div>
-        </div>
-      </div>
-
-      {/* Point on Line */}
-      <div className="absolute left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-background border-2 border-white/10 z-20 hidden md:block group-hover:scale-125 transition-transform duration-700 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
-        <motion.div 
-          initial={{ scale: 0 }}
-          animate={isInView ? { scale: 1 } : {}}
-          transition={{ delay: 0.6, type: "spring", stiffness: 200, damping: 20 }}
-          className="w-full h-full rounded-full bg-primary shadow-[0_0_15px_#39ff14]" 
-        />
-      </div>
-
-      {/* Spacer / Step Number */}
-      <div className={`hidden md:flex md:w-[42%] opacity-5 text-[10rem] font-black italic tracking-tighter pointer-events-none select-none ${isEven ? 'justify-start' : 'justify-end'}`}>
-        0{index + 1}
-      </div>
-    </motion.div>
   );
 };
 
@@ -1043,6 +907,66 @@ const ProgressBar = ({ step, index }: { step: any, index: number }) => {
         >
           <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.2)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.2)_50%,rgba(255,255,255,0.2)_75%,transparent_75%,transparent)] bg-[length:20px_20px] animate-shimmer opacity-20" />
         </motion.div>
+      </div>
+    </motion.div>
+  );
+};
+
+const ProcessStep = ({ step, index }: { step: any, index: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isEven = index % 2 === 0;
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ 
+        opacity: 0, 
+        x: isEven ? -100 : 100,
+        filter: "blur(10px)"
+      }}
+      animate={isInView ? { 
+        opacity: 1, 
+        x: 0,
+        filter: "blur(0px)"
+      } : {}}
+      transition={{ 
+        duration: 1, 
+        ease: [0.16, 1, 0.3, 1],
+        delay: 0.2
+      }}
+      className={`relative flex flex-col md:flex-row items-center gap-12 group ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+    >
+      {/* Content Card */}
+      <div className={`w-full md:w-[42%] ${isEven ? 'md:text-right' : 'md:text-left'}`}>
+        <div className="glass-premium p-10 rounded-[40px] border border-white/5 hover:border-primary/30 transition-all duration-700 group">
+          <div className={`flex items-center gap-6 mb-6 ${isEven ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
+            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-black transition-all duration-700 shadow-[0_0_20px_rgba(57,255,20,0.1)] group-hover:shadow-[0_0_30px_rgba(57,255,20,0.4)]">
+              <step.icon size={32} />
+            </div>
+            <h3 className="text-3xl font-bold tracking-tight group-hover:text-primary transition-colors duration-500">{step.title}</h3>
+          </div>
+          <p className="text-gray-400 text-lg mb-8 leading-relaxed font-medium group-hover:text-gray-200 transition-colors duration-500">{step.description}</p>
+          <div className={`flex items-center gap-3 text-sm font-bold uppercase tracking-[0.2em] text-primary/60 group-hover:text-primary transition-colors duration-500 ${isEven ? 'md:justify-end' : 'md:justify-start'}`}>
+            <Clock size={16} />
+            {step.duration}
+          </div>
+        </div>
+      </div>
+
+      {/* Point on Line */}
+      <div className="absolute left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-background border-2 border-white/10 z-20 hidden md:block group-hover:scale-125 transition-transform duration-700 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
+        <motion.div 
+          initial={{ scale: 0 }}
+          animate={isInView ? { scale: 1 } : {}}
+          transition={{ delay: 0.6, type: "spring", stiffness: 200, damping: 20 }}
+          className="w-full h-full rounded-full bg-primary shadow-[0_0_15px_#39ff14]" 
+        />
+      </div>
+
+      {/* Spacer / Step Number */}
+      <div className={`hidden md:flex md:w-[42%] opacity-5 text-[10rem] font-black italic tracking-tighter pointer-events-none select-none ${isEven ? 'justify-start' : 'justify-end'}`}>
+        0{index + 1}
       </div>
     </motion.div>
   );
@@ -1482,66 +1406,31 @@ const FAQ = () => {
 
 const CTA = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
   return (
-    <section className="py-60 container mx-auto px-6 text-center">
-      <motion.div 
-        whileInView={{ scale: [0.95, 1], opacity: [0, 1] }}
-        viewport={{ once: true }}
-        className="glass-premium p-12 md:p-48 rounded-[40px] md:rounded-[80px] relative overflow-hidden group"
-      >
-        <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-        <div className="relative z-10">
-          <h2 className="text-4xl md:text-[12rem] font-bold mb-8 md:mb-16 tracking-tightest leading-none uppercase">ГОТОВЫ <br /> <span className="text-primary">НАЧАТЬ?</span></h2>
-          <Button 
-            onClick={onOpenOrder}
-            size="lg" 
-            className="w-full md:w-auto bg-primary text-black hover:bg-white font-bold text-2xl md:text-4xl px-10 md:px-20 h-20 md:h-32 rounded-2xl md:rounded-[40px] shadow-[0_30px_100px_rgba(57,255,20,0.5)] transition-all transform hover:-translate-y-4"
-          >
-            ОБСУДИТЬ ПРОЕКТ
-          </Button>
-        </div>
-      </motion.div>
-    </section>
-  );
-};
-
-const Contact = () => {
-  return (
-    <section className="py-40 bg-black/40">
+    <section className="py-60 relative overflow-hidden">
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-4 gap-12">
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-                <Terminal className="text-black w-6 h-6" />
-              </div>
-              <span className="text-xl font-bold tracking-tighter">UnoStudio</span>
-            </div>
-            <p className="text-gray-500 max-w-sm mb-12">Профессиональная разработка для Minecraft. Создаем серверы, плагины и моды мирового уровня.</p>
-            <div className="flex gap-4">
-              {[Github, Twitter, MessageSquare].map((Icon, i) => (
-                <Button key={i} size="icon" variant="outline" className="rounded-xl border-white/10 hover:border-primary/50 hover:text-primary">
-                  <Icon size={20} />
-                </Button>
-              ))}
-            </div>
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          className="glass-premium p-20 md:p-40 rounded-[60px] border border-primary/20 text-center relative overflow-hidden group shadow-[0_0_100px_rgba(57,255,20,0.1)]"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+          <div className="relative z-10">
+            <h2 className="text-5xl md:text-8xl font-black mb-12 tracking-tighter uppercase leading-[0.9]">
+              ГОТОВЫ ЗАПУСТИТЬ <br /> <span className="text-primary text-glow-strong">СВОЙ СЕРВЕР?</span>
+            </h2>
+            <p className="text-xl md:text-3xl text-gray-400 mb-20 max-w-3xl mx-auto font-medium">
+              Не откладывайте на завтра то, что может приносить доход уже сегодня.
+            </p>
+            <Button 
+              onClick={onOpenOrder}
+              size="lg"
+              className="h-24 md:h-32 px-12 md:px-24 bg-primary text-black hover:bg-white rounded-3xl text-2xl md:text-4xl font-black shadow-[0_20px_60px_rgba(57,255,20,0.4)] hover:-translate-y-2 transition-all uppercase"
+            >
+              СВЯЗАТЬСЯ С НАМИ <MessageSquare className="w-8 h-8 md:w-12 md:h-12 ml-6" />
+            </Button>
           </div>
-          <div>
-            <h4 className="font-bold uppercase tracking-widest text-xs mb-8 text-primary">Разделы</h4>
-            <ul className="space-y-4">
-              {["Услуги", "Портфолио", "Цены", "Команда"].map(item => (
-                <li key={item}><a href="#" className="text-gray-500 hover:text-white transition-colors">{item}</a></li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold uppercase tracking-widest text-xs mb-8 text-primary">Контакты</h4>
-            <ul className="space-y-4 text-gray-500">
-              <li className="flex items-center gap-3"><MessageSquare size={16} /> @unostudio_dev</li>
-              <li className="flex items-center gap-3"><Globe size={16} /> unostudio.io</li>
-              <li className="flex items-center gap-3"><Clock size={16} /> 24/7 Поддержка</li>
-            </ul>
-          </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -1549,12 +1438,46 @@ const Contact = () => {
 
 const Footer = () => {
   return (
-    <footer className="py-12 border-t border-white/5 bg-black/60">
-      <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-        <p className="text-gray-500 text-xs font-bold tracking-[0.2em] uppercase">© 2026 UNOSTUDIO. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</p>
-        <div className="flex gap-12">
-          <a href="#" className="text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:text-primary transition-colors">Политика конфиденциальности</a>
-          <a href="#" className="text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:text-primary transition-colors">Условия использования</a>
+    <footer className="py-20 border-t border-white/5 bg-black/40 backdrop-blur-3xl">
+      <div className="container mx-auto px-6">
+        <div className="grid md:grid-cols-4 gap-16 mb-20">
+          <div className="col-span-2">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center shadow-[0_0_20px_#39ff14]">
+                <Terminal className="text-black w-7 h-7" />
+              </div>
+              <span className="text-3xl font-black tracking-tighter">Uno<span className="text-primary">Studio</span></span>
+            </div>
+            <p className="text-gray-500 text-lg max-w-md leading-relaxed font-medium">
+              Лидеры в области разработки игровых решений для Minecraft. Мы создаем будущее игры уже сегодня.
+            </p>
+          </div>
+          <div>
+            <h4 className="text-white font-bold mb-8 uppercase tracking-widest text-sm">Навигация</h4>
+            <ul className="space-y-4 text-gray-500 font-medium">
+              <li><a href="#services" className="hover:text-primary transition-colors">Услуги</a></li>
+              <li><a href="#portfolio" className="hover:text-primary transition-colors">Портфолио</a></li>
+              <li><a href="#pricing" className="hover:text-primary transition-colors">Цены</a></li>
+              <li><a href="#team" className="hover:text-primary transition-colors">Команда</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-white font-bold mb-8 uppercase tracking-widest text-sm">Контакты</h4>
+            <div className="flex gap-4">
+              <motion.a whileHover={{ y: -5, color: "#39ff14" }} href="#" className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-gray-400 hover:bg-primary/10 transition-all border border-white/5">
+                <Github size={24} />
+              </motion.a>
+              <motion.a whileHover={{ y: -5, color: "#39ff14" }} href="#" className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-gray-400 hover:bg-primary/10 transition-all border border-white/5">
+                <Twitter size={24} />
+              </motion.a>
+              <motion.a whileHover={{ y: -5, color: "#39ff14" }} href="#" className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-gray-400 hover:bg-primary/10 transition-all border border-white/5">
+                <MessageCircle size={24} />
+              </motion.a>
+            </div>
+          </div>
+        </div>
+        <div className="pt-12 border-t border-white/5 text-center text-gray-600 font-bold uppercase tracking-widest text-xs">
+          © 2024 Uno Studio. Все права защищены. Разработано с страстью к Minecraft.
         </div>
       </div>
     </footer>
