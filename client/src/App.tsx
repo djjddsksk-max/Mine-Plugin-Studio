@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AnimatePresence, motion } from "framer-motion";
 import LoadingScreen from "@/components/loading-screen";
+import { CustomCursor } from "@/components/custom-cursor";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 
@@ -24,6 +25,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <CustomCursor />
         <AnimatePresence mode="wait">
           {isLoading ? (
             <LoadingScreen key="loader" onLoadingComplete={() => setIsLoading(false)} />
