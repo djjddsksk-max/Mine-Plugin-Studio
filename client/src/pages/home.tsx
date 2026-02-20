@@ -268,6 +268,106 @@ const Services = () => {
   );
 };
 
+const Portfolio = () => {
+  const projects = [
+    {
+      title: "Etheria RPG",
+      description: "Глобальный RPG сервер с уникальной системой прокачки и кастомными монстрами.",
+      tags: ["MMORPG", "Plugins", "Paper"],
+      image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      title: "Hardcore Survival",
+      description: "Модпак для выживания в экстремальных условиях с новыми механиками температуры.",
+      tags: ["Modding", "Forge", "Survival"],
+      image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      title: "SkyBlock Advanced",
+      description: "Улучшенный SkyBlock с автоматизацией и кастомными островами.",
+      tags: ["SkyBlock", "Automation", "Spigot"],
+      image: "https://images.unsplash.com/photo-1614728263952-84ea206f99b6?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      title: "PvP Arena Pro",
+      description: "Плагин для автоматизации турниров и рейтинговых боев.",
+      tags: ["PvP", "System", "Plugin"],
+      image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      title: "BlockEco",
+      description: "Экономическая система с рынком, акциями и банковской системой.",
+      tags: ["Economy", "Database", "Plugin"],
+      image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      title: "Dungeon Master",
+      description: "Генератор процедурных подземелий с боссами и лутом.",
+      tags: ["Generation", "Mod", "Fabric"],
+      image: "https://images.unsplash.com/photo-1627389955609-bc015e2a2202?q=80&w=800&auto=format&fit=crop"
+    }
+  ];
+
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <section id="portfolio" ref={ref} className="py-60 bg-background relative overflow-hidden">
+      <div className="container mx-auto px-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="mb-40"
+        >
+          <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.2em] font-bold uppercase hover:bg-primary/20 transition-all duration-500 cursor-default">Портфолио</Badge>
+          <h2 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight uppercase hover:text-primary transition-all duration-700 ease-in-out cursor-default">
+            НАШИ <span className="text-gray-800/30">ПРОЕКТЫ</span>
+          </h2>
+        </motion.div>
+
+        <div className="grid md:grid-cols-3 gap-8 relative z-10">
+          {projects.map((project, idx) => (
+            <motion.div
+              key={project.title}
+              initial={{ opacity: 0, y: 50 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: idx * 0.1, duration: 0.8 }}
+            >
+              <PerspectiveCard className="h-full">
+                <Card className="glass-premium border-white/5 overflow-hidden h-full group">
+                  <div className="relative h-48 overflow-hidden">
+                    <img 
+                      src={project.image} 
+                      alt={project.title} 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                    />
+                    <div className="absolute inset-0 bg-black/60 opacity-60 group-hover:opacity-20 transition-opacity" />
+                  </div>
+                  <CardContent className="p-8">
+                    <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">{project.title}</h3>
+                    <p className="text-gray-400 mb-6 line-clamp-2">{project.description}</p>
+                    <div className="flex flex-wrap gap-2 mb-8">
+                      {project.tags.map(tag => (
+                        <span key={tag} className="text-[10px] uppercase tracking-wider font-bold px-2 py-1 bg-white/5 border border-white/10 rounded text-gray-500 group-hover:text-primary/70 group-hover:border-primary/20 transition-colors">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <Button variant="outline" className="w-full border-primary/20 text-primary hover:bg-primary hover:text-black font-bold uppercase tracking-widest text-xs py-6 transition-all">
+                      ПОДРОБНЕЕ
+                    </Button>
+                  </CardContent>
+                </Card>
+              </PerspectiveCard>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const Footer = () => {
   return (
     <footer className="py-40 bg-black/50 border-t border-white/5 relative overflow-hidden">
@@ -351,6 +451,7 @@ export default function Home() {
       <main>
         <Hero />
         <Services />
+        <Portfolio />
         <section className="py-60 container mx-auto px-6 text-center">
            <motion.div 
           whileInView={{ scale: [0.95, 1], opacity: [0, 1] }}
