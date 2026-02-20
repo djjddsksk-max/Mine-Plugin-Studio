@@ -68,11 +68,11 @@ export function MusicPlayer() {
       <AnimatePresence>
         {isVisible && (
           <motion.div
-            initial={{ y: -100, x: "-50%", scale: 0 }}
-            animate={{ y: 0, x: "-50%", scale: 1 }}
-            exit={{ y: -100, x: "-50%", scale: 0 }}
+            initial={{ y: -100, scale: 0 }}
+            animate={{ y: 0, scale: 1 }}
+            exit={{ y: -100, scale: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            className="fixed top-4 left-1/2 z-[150] cursor-pointer"
+            className="fixed top-4 left-1/2 -translate-x-1/2 z-[150] cursor-pointer"
             onClick={toggleExpand}
           >
             <motion.div
@@ -80,7 +80,7 @@ export function MusicPlayer() {
               transition={{
                 layout: { duration: 0.3, type: "spring", stiffness: 200, damping: 25 }
               }}
-              className="bg-black/80 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden flex items-center px-4"
+              className="bg-black/80 backdrop-blur-xl border border-white/10 shadow-[0_0_30px_rgba(57,255,20,0.2)] overflow-hidden flex items-center px-4"
               style={{
                 borderRadius: isExpanded ? "24px" : "999px",
                 width: isExpanded ? "320px" : "60px",
@@ -95,7 +95,7 @@ export function MusicPlayer() {
                   layoutId="icon"
                 >
                   <Music 
-                    className={`w-4 h-4 text-[#00ff41] ${isPlaying ? "animate-pulse" : ""}`} 
+                    className={`w-4 h-4 text-primary ${isPlaying ? "animate-pulse" : ""}`} 
                   />
                 </motion.div>
               ) : (
@@ -107,7 +107,7 @@ export function MusicPlayer() {
                   <div className="flex items-center justify-between pointer-events-auto">
                     <div className="flex items-center gap-3 overflow-hidden select-none">
                       <motion.div layoutId="icon">
-                        <Music className={`w-5 h-5 text-[#00ff41] ${isPlaying ? "animate-pulse" : ""}`} />
+                        <Music className={`w-5 h-5 text-primary ${isPlaying ? "animate-pulse" : ""}`} />
                       </motion.div>
                       <div className="flex flex-col overflow-hidden">
                         <span className="text-xs font-bold text-white truncate leading-tight">Cybertrack 2077</span>
@@ -120,9 +120,9 @@ export function MusicPlayer() {
                         className="p-2 hover:bg-white/10 rounded-full transition-colors active:scale-90"
                       >
                         {isPlaying ? (
-                          <Pause className="w-4 h-4 text-[#00ff41] fill-[#00ff41]" />
+                          <Pause className="w-4 h-4 text-primary fill-primary" />
                         ) : (
-                          <Play className="w-4 h-4 text-[#00ff41] fill-[#00ff41]" />
+                          <Play className="w-4 h-4 text-primary fill-primary" />
                         )}
                       </button>
                       <button 
@@ -145,7 +145,7 @@ export function MusicPlayer() {
                       step={1}
                       onValueChange={(val) => setVolume(val[0] / 100)}
                       onPointerDown={(e) => e.stopPropagation()}
-                      className="w-full cursor-pointer [&_[role=slider]]:bg-[#00ff41] [&_[role=slider]]:border-none"
+                      className="w-full cursor-pointer [&_[role=slider]]:bg-primary [&_[role=slider]]:border-none"
                     />
                   </div>
                 </motion.div>
