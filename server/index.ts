@@ -93,11 +93,8 @@ app.use((req, res, next) => {
   httpServer.listen(
     {
       port,
-<<<<<<< HEAD
       host: "localhost",
-=======
       host: "0.0.0.0",
->>>>>>> 2d254d850af0f50732e363bb685c4c1a7f1ec721
       reusePort: true,
     },
     () => {

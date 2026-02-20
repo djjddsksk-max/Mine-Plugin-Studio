@@ -15,11 +15,16 @@ import {
   MessageSquare,
   Box,
   Layers,
-  Cpu
+  Cpu,
+  MessageCircle,
+  Clock,
+  Globe,
+  Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { OrderModal } from "@/components/order-modal";
 
 const PerspectiveCard = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
   const x = useMotionValue(0);
@@ -52,7 +57,70 @@ const PerspectiveCard = ({ children, className = "" }: { children: React.ReactNo
   );
 };
 
-const Navbar = () => {
+const Petals = () => {
+  return (
+    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+      {[...Array(20)].map((_, i) => (
+        <motion.div
+          key={i}
+          initial={{ 
+            top: -20, 
+            left: `${Math.random() * 100}%`,
+            rotate: Math.random() * 360,
+            scale: Math.random() * 0.5 + 0.5
+          }}
+          animate={{ 
+            top: '120%',
+            left: `${(Math.random() * 20 - 10) + (i * 5)}%`,
+            rotate: Math.random() * 1000,
+          }}
+          transition={{ 
+            duration: Math.random() * 10 + 10,
+            repeat: Infinity,
+            ease: "linear",
+            delay: Math.random() * 10
+          }}
+          style={{
+            position: 'absolute',
+            width: '15px',
+            height: '20px',
+            background: 'linear-gradient(135deg, #ffb7c5 0%, #ff9aae 100%)',
+            borderRadius: '150% 0 150% 0',
+            opacity: 0.6,
+            filter: 'blur(1px)'
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+export default function Home() {
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+
+  return (
+    <div className="min-h-screen bg-background text-white selection:bg-primary/30">
+      <Petals />
+      <motion.div className="fixed top-0 left-0 right-0 h-1 bg-primary z-[200] shadow-[0_0_20px_#39ff14]" style={{ scaleX }} />
+      <Navbar onOpenOrder={() => setIsOrderModalOpen(true)} />
+      <main>
+        <Hero onOpenOrder={() => setIsOrderModalOpen(true)} />
+        <Services />
+        <Portfolio />
+        <Pricing onOpenOrder={() => setIsOrderModalOpen(true)} />
+        <Team />
+        <FAQ />
+        <CTA onOpenOrder={() => setIsOrderModalOpen(true)} />
+      </main>
+      <Footer />
+      <OrderModal isOpen={isOrderModalOpen} onClose={() => setIsOrderModalOpen(false)} />
+    </div>
+  );
+}
+
+const Navbar = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -86,7 +154,10 @@ const Navbar = () => {
               {item}
             </motion.a>
           ))}
-          <Button className="bg-primary text-black hover:bg-white font-bold px-10 h-14 rounded-2xl transition-all shadow-[0_10px_30px_-10px_rgba(57,255,20,0.5)] active:scale-95 group">
+          <Button 
+            onClick={onOpenOrder}
+            className="bg-primary text-black hover:bg-white font-bold px-10 h-14 rounded-2xl transition-all shadow-[0_10px_30px_-10px_rgba(57,255,20,0.5)] active:scale-95 group"
+          >
             ОБСУДИТЬ ПРОЕКТ <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
           </Button>
         </div>
@@ -108,7 +179,15 @@ const Navbar = () => {
              {["Услуги", "Портфолио", "Цены", "Команда"].map(item => (
                <a key={item} href={`#${item === "Услуги" ? "services" : item === "Портфолио" ? "portfolio" : item === "Цены" ? "pricing" : "team"}`} className="text-4xl font-bold tracking-tighter" onClick={() => setMobileMenuOpen(false)}>{item}</a>
              ))}
-             <Button className="w-64 bg-primary text-black font-bold text-2xl py-10 rounded-3xl">СВЯЗАТЬСЯ</Button>
+             <Button 
+               onClick={() => {
+                 setMobileMenuOpen(false);
+                 onOpenOrder();
+               }}
+               className="w-64 bg-primary text-black font-bold text-2xl py-10 rounded-3xl"
+             >
+               СВЯЗАТЬСЯ
+             </Button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -116,7 +195,7 @@ const Navbar = () => {
   );
 };
 
-const Hero = () => {
+const Hero = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 1000], [0, 400]);
   const rotate = useTransform(scrollY, [0, 1000], [0, 10]);
@@ -178,11 +257,15 @@ const Hero = () => {
               className="flex flex-col sm:flex-row justify-center gap-4 md:gap-8 px-4"
             >
               <PerspectiveCard className="w-full sm:w-auto">
-                <Button size="xl" className="w-full sm:w-auto bg-primary text-black hover:bg-white font-bold text-xl md:text-3xl px-8 md:px-16 h-16 md:h-24 rounded-2xl md:rounded-3xl shadow-[0_20px_50px_rgba(57,255,20,0.4)] transition-all">
+                <Button 
+                  onClick={onOpenOrder}
+                  size="lg" 
+                  className="w-full sm:w-auto bg-primary text-black hover:bg-white font-bold text-xl md:text-3xl px-8 md:px-16 h-16 md:h-24 rounded-2xl md:rounded-3xl shadow-[0_20px_50px_rgba(57,255,20,0.4)] transition-all"
+                >
                   НАЧАТЬ ПРОЕКТ
                 </Button>
               </PerspectiveCard>
-              <Button size="xl" variant="outline" className="w-full sm:w-auto border-white/5 hover:bg-white/5 font-bold text-xl md:text-3xl px-8 md:px-16 h-16 md:h-24 rounded-2xl md:rounded-3xl backdrop-blur-3xl">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto border-white/5 hover:bg-white/5 font-bold text-xl md:text-3xl px-8 md:px-16 h-16 md:h-24 rounded-2xl md:rounded-3xl backdrop-blur-3xl">
                 ПОРТФОЛИО
               </Button>
             </motion.div>
@@ -368,7 +451,7 @@ const Portfolio = () => {
   );
 };
 
-const Pricing = () => {
+const Pricing = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
   const plans = [
     {
       name: "Базовый",
@@ -439,7 +522,10 @@ const Pricing = () => {
                       ))}
                     </ul>
 
-                    <Button className={`w-full py-8 text-lg font-bold uppercase tracking-widest rounded-2xl transition-all ${plan.popular ? 'bg-primary text-black hover:bg-white shadow-[0_10px_30px_rgba(57,255,20,0.3)]' : 'bg-white/5 text-white hover:bg-white/10 border border-white/10'}`}>
+                    <Button 
+                      onClick={onOpenOrder}
+                      className={`w-full py-8 text-lg font-bold uppercase tracking-widest rounded-2xl transition-all ${plan.popular ? 'bg-primary text-black hover:bg-white shadow-[0_10px_30px_rgba(57,255,20,0.3)]' : 'bg-white/5 text-white hover:bg-white/10 border border-white/10'}`}
+                    >
                       ВЫБРАТЬ ПЛАН
                     </Button>
                   </CardContent>
@@ -477,63 +563,30 @@ const Team = () => {
 
         <div className="grid md:grid-cols-3 gap-12 relative z-10">
           {members.map((member, idx) => (
-            <PerspectiveCard key={member.name}>
-              <Card className="glass-premium border-white/5 overflow-hidden group">
-                <CardContent className="p-12 text-center">
-                  <div className={`w-32 h-32 mx-auto rounded-3xl bg-gradient-to-br ${member.color} to-transparent flex items-center justify-center mb-8 border border-white/5 group-hover:border-primary/50 transition-all duration-700`}>
-                    <div className="text-4xl font-black text-white/20 group-hover:text-primary transition-colors">{member.name[0]}</div>
-                  </div>
-                  <h3 className="text-3xl font-bold mb-2 group-hover:text-primary transition-colors">{member.name}</h3>
-                  <p className="text-primary/60 font-bold tracking-widest text-xs uppercase mb-8">{member.role}</p>
-                  <div className="flex flex-wrap justify-center gap-2">
-                    {member.skills.map(skill => (
-                      <span key={skill} className="text-[10px] font-bold px-3 py-1 bg-white/5 rounded-full border border-white/10 text-gray-400">{skill}</span>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </PerspectiveCard>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const FAQ = () => {
-  const items = [
-    { q: "Какие версии Minecraft вы поддерживаете?", a: "Мы работаем со всеми актуальными версиями от 1.8.8 до самых последних снапшотов 1.21+." },
-    { q: "Сколько времени занимает разработка?", a: "Простые плагины от 3 дней, полноценные серверы от 2 недель до нескольких месяцев." },
-    { q: "Предоставляете ли вы исходный код?", a: "Да, по завершении проекта мы передаем все исходные файлы и документацию." }
-  ];
-
-  return (
-    <section id="faq" className="py-60 bg-background relative">
-      <div className="container mx-auto px-6 max-w-4xl">
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-24 text-center"
-        >
-          <h2 className="text-5xl md:text-7xl font-bold uppercase mb-4">FAQ</h2>
-          <p className="text-gray-500 font-medium tracking-widest uppercase text-sm">Часто задаваемые вопросы</p>
-        </motion.div>
-        
-        <div className="space-y-4">
-          {items.map((item, idx) => (
             <motion.div
-              key={idx}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              key={member.name}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="glass-premium p-8 rounded-2xl border border-white/5 hover:border-primary/30 transition-all cursor-pointer group"
+              transition={{ delay: idx * 0.2 }}
             >
-              <h3 className="text-xl font-bold mb-4 flex justify-between items-center group-hover:text-primary transition-colors">
-                {item.q} <ChevronRight className="w-5 h-5 opacity-50 group-hover:rotate-90 transition-transform" />
-              </h3>
-              <p className="text-gray-400 leading-relaxed">{item.a}</p>
+              <PerspectiveCard>
+                <Card className="glass-premium border-white/5 overflow-hidden group">
+                  <div className={`h-2 bg-gradient-to-r ${member.color} to-transparent`} />
+                  <CardContent className="p-12 text-center">
+                    <div className="w-32 h-32 rounded-full bg-white/5 mx-auto mb-8 border border-white/10 flex items-center justify-center group-hover:border-primary/50 transition-colors">
+                      <Terminal className="w-12 h-12 text-primary opacity-20 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                    <h3 className="text-3xl font-bold mb-2 tracking-tighter group-hover:text-primary transition-colors">{member.name}</h3>
+                    <p className="text-primary/60 font-bold uppercase tracking-widest text-xs mb-8">{member.role}</p>
+                    <div className="flex flex-wrap justify-center gap-2">
+                      {member.skills.map(skill => (
+                        <Badge key={skill} variant="outline" className="border-white/10 text-gray-500 text-[10px]">{skill}</Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </PerspectiveCard>
             </motion.div>
           ))}
         </div>
@@ -542,110 +595,120 @@ const FAQ = () => {
   );
 };
 
+const FAQ = () => {
+  const faqs = [
+    { q: "Как долго длится разработка?", a: "От 3 дней до месяца, в зависимости от сложности." },
+    { q: "Предоставляете ли вы исходный код?", a: "Да, после полной оплаты вы получаете весь исходный код проекта." },
+    { q: "Какие версии Minecraft поддерживаете?", a: "Мы работаем со всеми актуальными версиями от 1.8.8 до 1.21+." }
+  ];
+
+  return (
+    <section className="py-60 bg-background relative overflow-hidden">
+      <div className="container mx-auto px-6">
+        <div className="grid lg:grid-cols-2 gap-24 items-center">
+          <div>
+            <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.2em] font-bold uppercase">Вопросы</Badge>
+            <h2 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight uppercase mb-12">ЧАСТО <br /> <span className="text-gray-800/30">ЗАДАВАЕМЫЕ</span></h2>
+            <p className="text-xl text-gray-400 font-medium max-w-md">Ответы на самые популярные вопросы о нашей работе.</p>
+          </div>
+          <div className="space-y-8">
+            {faqs.map((faq, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="glass-premium p-8 rounded-3xl border border-white/5 hover:border-primary/20 transition-all"
+              >
+                <h3 className="text-2xl font-bold mb-4 text-primary">{faq.q}</h3>
+                <p className="text-gray-400 leading-relaxed">{faq.a}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const CTA = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
+  return (
+    <section className="py-60 container mx-auto px-6 text-center">
+      <motion.div 
+        whileInView={{ scale: [0.95, 1], opacity: [0, 1] }}
+        viewport={{ once: true }}
+        className="glass-premium p-12 md:p-48 rounded-[40px] md:rounded-[80px] relative overflow-hidden group"
+      >
+        <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+        <div className="relative z-10">
+          <h2 className="text-4xl md:text-[12rem] font-bold mb-8 md:mb-16 tracking-tightest leading-none uppercase">ГОТОВЫ <br /> <span className="text-primary">НАЧАТЬ?</span></h2>
+          <Button 
+            onClick={onOpenOrder}
+            size="lg" 
+            className="w-full md:w-auto bg-primary text-black hover:bg-white font-bold text-2xl md:text-4xl px-10 md:px-20 h-20 md:h-32 rounded-2xl md:rounded-[40px] shadow-[0_30px_100px_rgba(57,255,20,0.5)] transition-all transform hover:-translate-y-4"
+          >
+            ОБСУДИТЬ ПРОЕКТ
+          </Button>
+        </div>
+      </motion.div>
+    </section>
+  );
+};
+
+const Contact = () => {
+  return (
+    <section className="py-40 bg-black/40">
+      <div className="container mx-auto px-6">
+        <div className="grid lg:grid-cols-4 gap-12">
+          <div className="lg:col-span-2">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+                <Terminal className="text-black w-6 h-6" />
+              </div>
+              <span className="text-xl font-bold tracking-tighter">BLOCKFORGE</span>
+            </div>
+            <p className="text-gray-500 max-w-sm mb-12">Ваш надежный партнер в разработке уникальных игровых решений для Minecraft. Создаем будущее вместе.</p>
+            <div className="flex gap-4">
+              {[Github, Twitter, MessageCircle].map((Icon, i) => (
+                <Button key={i} size="icon" variant="outline" className="rounded-xl border-white/10 hover:border-primary/50 hover:text-primary">
+                  <Icon size={20} />
+                </Button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h4 className="font-bold uppercase tracking-widest text-xs mb-8 text-primary">Разделы</h4>
+            <ul className="space-y-4">
+              {["Услуги", "Портфолио", "Цены", "Команда"].map(item => (
+                <li key={item}><a href="#" className="text-gray-500 hover:text-white transition-colors">{item}</a></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold uppercase tracking-widest text-xs mb-8 text-primary">Контакты</h4>
+            <ul className="space-y-4 text-gray-500">
+              <li className="flex items-center gap-3"><MessageCircle size={16} /> @blockforge_dev</li>
+              <li className="flex items-center gap-3"><Globe size={16} /> blockforge.studio</li>
+              <li className="flex items-center gap-3"><Clock size={16} /> 24/7 Поддержка</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const Footer = () => {
   return (
-    <footer className="py-40 bg-black/50 border-t border-white/5 relative overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-20 mb-40">
-           <div className="flex flex-col items-center md:items-start text-center md:text-left">
-              <div className="flex items-center gap-4 mb-10">
-                <Terminal className="text-primary w-14 h-14" />
-                <span className="text-5xl font-bold font-display tracking-tightest">BLOCKFORGE</span>
-              </div>
-              <p className="text-2xl text-gray-500 max-w-lg font-medium tracking-tight">
-                Профессиональная разработка для Minecraft. <br /> Создано с любовью к игре.
-              </p>
-           </div>
-           <div className="flex flex-wrap justify-center gap-12 md:gap-24">
-              {["Github", "Discord", "Telegram"].map(social => (
-                <motion.a key={social} whileHover={{ y: -2, color: "#39ff14" }} className="text-2xl font-bold uppercase tracking-widest text-gray-600 cursor-pointer">{social}</motion.a>
-              ))}
-           </div>
-        </div>
-        
-        <div className="pt-20 border-t border-white/5 flex flex-col md:row justify-between items-center gap-10">
-          <span className="text-gray-700 font-bold uppercase tracking-[1em] text-[12px]">© 2026 BLOCKFORGE</span>
-          <div className="flex gap-12 text-gray-700 font-bold uppercase tracking-widest text-[12px]">
-             <a href="#" className="hover:text-white transition-colors">Политика конфиденциальности</a>
-             <a href="#" className="hover:text-white transition-colors">Условия использования</a>
-          </div>
+    <footer className="py-12 border-t border-white/5 bg-black/60">
+      <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+        <p className="text-gray-500 text-xs font-bold tracking-[0.2em] uppercase">© 2024 BLOCKFORGE STUDIO. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</p>
+        <div className="flex gap-12">
+          <a href="#" className="text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:text-primary transition-colors">Privacy Policy</a>
+          <a href="#" className="text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:text-primary transition-colors">Terms of Service</a>
         </div>
       </div>
     </footer>
   );
 };
-
-const Petals = () => {
-  return (
-    <div className="fixed inset-0 pointer-events-none z-[99] overflow-hidden">
-      {[...Array(20)].map((_, i) => (
-        <motion.div
-          key={i}
-          initial={{ 
-            top: -20, 
-            left: `${Math.random() * 100}%`,
-            scale: Math.random() * 0.5 + 0.5,
-            rotate: Math.random() * 360
-          }}
-          animate={{
-            top: "110%",
-            left: `${(Math.random() * 100)}%`,
-            rotate: 360,
-          }}
-          transition={{
-            duration: Math.random() * 10 + 15,
-            repeat: Infinity,
-            ease: "linear",
-            delay: Math.random() * 20
-          }}
-          style={{
-            position: 'absolute',
-            width: '15px',
-            height: '20px',
-            background: 'linear-gradient(135deg, #ffb7c5 0%, #ff9aae 100%)',
-            borderRadius: '150% 0 150% 0',
-            opacity: 0.6,
-            filter: 'blur(1px)'
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
-export default function Home() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
-
-  return (
-    <div className="min-h-screen bg-background text-white selection:bg-primary/30">
-      <Petals />
-      <motion.div className="fixed top-0 left-0 right-0 h-1 bg-primary z-[200] shadow-[0_0_20px_#39ff14]" style={{ scaleX }} />
-      <Navbar />
-      <main>
-        <Hero />
-        <Services />
-        <Portfolio />
-        <Pricing />
-        <Team />
-        <FAQ />
-        <section className="py-60 container mx-auto px-6 text-center">
-           <motion.div 
-          whileInView={{ scale: [0.95, 1], opacity: [0, 1] }}
-          viewport={{ once: true }}
-          className="glass-premium p-12 md:p-48 rounded-[40px] md:rounded-[80px] relative overflow-hidden group"
-        >
-          <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-          <div className="relative z-10">
-            <h2 className="text-4xl md:text-[12rem] font-bold mb-8 md:mb-16 tracking-tightest leading-none uppercase">ГОТОВЫ <br /> <span className="text-primary">НАЧАТЬ?</span></h2>
-            <Button size="xl" className="w-full md:w-auto bg-primary text-black hover:bg-white font-bold text-2xl md:text-4xl px-10 md:px-20 h-20 md:h-32 rounded-2xl md:rounded-[40px] shadow-[0_30px_100px_rgba(57,255,20,0.5)] transition-all transform hover:-translate-y-4">
-              ОБСУДИТЬ ПРОЕКТ
-            </Button>
-          </div>
-        </motion.div>
-        </section>
-      </main>
-      <Footer />
-    </div>
-  );
-}
