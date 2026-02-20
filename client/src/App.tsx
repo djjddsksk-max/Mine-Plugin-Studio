@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import LoadingScreen from "@/components/loading-screen";
 import { CustomCursor } from "@/components/custom-cursor";
+import { MusicPlayer } from "@/components/music-player";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 
@@ -59,6 +60,7 @@ function App() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
             >
+              <MusicPlayer />
               <Toaster />
               <Router />
             </motion.div>
