@@ -62,40 +62,97 @@ const PerspectiveCard = ({ children, className = "" }: { children: React.ReactNo
   );
 };
 
-const Petals = () => {
+const CyberBackground = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let particles: Array<{
+      x: number;
+      y: number;
+      size: number;
+      speed: number;
+      opacity: number;
+      flicker: number;
+    }> = [];
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initParticles();
+    };
+
+    const initParticles = () => {
+      particles = [];
+      const count = Math.floor((canvas.width * canvas.height) / 10000);
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2 + 1,
+          speed: Math.random() * 0.5 + 0.2,
+          opacity: Math.random() * 0.5 + 0.2,
+          flicker: Math.random() * 0.05
+        });
+      }
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particles.forEach(p => {
+        p.y -= p.speed;
+        if (p.y < -10) p.y = canvas.height + 10;
+        
+        p.opacity += (Math.random() - 0.5) * p.flicker;
+        if (p.opacity < 0.1) p.opacity = 0.1;
+        if (p.opacity > 0.8) p.opacity = 0.8;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(57, 255, 20, ${p.opacity})`;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#39ff14';
+        ctx.fill();
+      });
+
+      animationFrameId = requestAnimationFrame(draw);
+    };
+
+    window.addEventListener('resize', resize);
+    resize();
+    draw();
+
+    return () => {
+      window.removeEventListener('resize', resize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
   return (
-    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-      {[...Array(20)].map((_, i) => (
-        <motion.div
-          key={i}
-          initial={{ 
-            top: -20, 
-            left: `${Math.random() * 100}%`,
-            rotate: Math.random() * 360,
-            scale: Math.random() * 0.5 + 0.5
-          }}
-          animate={{ 
-            top: '120%',
-            left: `${(Math.random() * 20 - 10) + (i * 5)}%`,
-            rotate: Math.random() * 1000,
-          }}
-          transition={{ 
-            duration: Math.random() * 10 + 10,
-            repeat: Infinity,
-            ease: "linear",
-            delay: Math.random() * 10
-          }}
-          style={{
-            position: 'absolute',
-            width: '15px',
-            height: '20px',
-            background: 'linear-gradient(135deg, #ffb7c5 0%, #ff9aae 100%)',
-            borderRadius: '150% 0 150% 0',
-            opacity: 0.6,
-            filter: 'blur(1px)'
-          }}
-        />
-      ))}
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#050505]">
+      {/* Perspective Grid */}
+      <div 
+        className="absolute inset-0 opacity-[0.05]"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, #39ff14 1px, transparent 1px),
+            linear-gradient(to bottom, #39ff14 1px, transparent 1px)
+          `,
+          backgroundSize: '100px 100px',
+          maskImage: 'radial-gradient(ellipse at 50% 50%, black, transparent)',
+          transform: 'perspective(1000px) rotateX(60deg) translateY(-100px) scale(2)',
+          transformOrigin: 'top'
+        }}
+      />
+      <canvas ref={canvasRef} className="absolute inset-0" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background" />
     </div>
   );
 };
@@ -107,7 +164,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-white selection:bg-primary/30">
-      <Petals />
+      <CyberBackground />
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-primary z-[200] shadow-[0_0_20px_#39ff14]" style={{ scaleX }} />
       <Navbar onOpenOrder={() => setIsOrderModalOpen(true)} />
       <main>
