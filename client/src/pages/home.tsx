@@ -19,7 +19,12 @@ import {
   MessageCircle,
   Clock,
   Globe,
-  Star
+  Star,
+  Search,
+  FileText,
+  Code,
+  CheckCircle,
+  Rocket
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -109,6 +114,7 @@ export default function Home() {
         <Hero onOpenOrder={() => setIsOrderModalOpen(true)} />
         <Stats />
         <Services />
+        <WorkProcess />
         <Portfolio />
         <Pricing onOpenOrder={() => setIsOrderModalOpen(true)} />
         <Team />
@@ -421,6 +427,127 @@ const Services = () => {
         </div>
       </div>
     </section>
+  );
+};
+
+const WorkProcess = () => {
+  const steps = [
+    {
+      icon: Search,
+      title: "Анализ ТЗ",
+      description: "Глубокое погружение в ваши требования, изучение механик и составление детального плана реализации.",
+      duration: "1 день"
+    },
+    {
+      icon: FileText,
+      title: "Прототип",
+      description: "Создание архитектуры проекта, проектирование баз данных и основных API-интерфейсов.",
+      duration: "2-3 дня"
+    },
+    {
+      icon: Code,
+      title: "Разработка",
+      description: "Написание чистого и оптимизированного кода, реализация всех игровых систем и механик.",
+      duration: "1-4 недели"
+    },
+    {
+      icon: CheckCircle,
+      title: "Тестирование",
+      description: "Тщательная проверка на баги, стресс-тесты производительности и полировка игрового процесса.",
+      duration: "3-5 дней"
+    },
+    {
+      icon: Rocket,
+      title: "Запуск",
+      description: "Развертывание проекта, финальная настройка и долгосрочная техническая поддержка.",
+      duration: "Поддержка"
+    }
+  ];
+
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+
+  const lineHeight = useSpring(useTransform(scrollYProgress, [0.1, 0.9], ["0%", "100%"]), {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  return (
+    <section id="process" ref={ref} className="py-60 bg-background relative overflow-hidden">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-40">
+          <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.2em] font-bold uppercase cursor-default">Процесс</Badge>
+          <h2 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight uppercase cursor-default">
+            КАК МЫ <span className="text-gray-800/30">РАБОТАЕМ</span>
+          </h2>
+        </div>
+
+        <div className="relative max-w-4xl mx-auto">
+          {/* Vertical Line */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/5 -translate-x-1/2 hidden md:block" />
+          <motion.div 
+            style={{ height: lineHeight }}
+            className="absolute left-1/2 top-0 w-px bg-primary -translate-x-1/2 z-10 hidden md:block shadow-[0_0_15px_rgba(57,255,20,0.5)]" 
+          />
+
+          <div className="space-y-32">
+            {steps.map((step, idx) => (
+              <ProcessStep key={idx} step={step} index={idx} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ProcessStep = ({ step, index }: { step: any, index: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isEven = index % 2 === 0;
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: isEven ? -50 : 50 }}
+      animate={isInView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.8, delay: index * 0.1 }}
+      className={`relative flex items-center justify-center md:justify-between ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+    >
+      {/* Content */}
+      <div className={`w-full md:w-[42%] ${isEven ? 'md:text-right' : 'md:text-left'}`}>
+        <div className="glass-premium p-8 rounded-3xl border border-white/5 hover:border-primary/30 transition-all duration-500 group">
+          <div className={`flex items-center gap-4 mb-4 ${isEven ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
+            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-black transition-all duration-500">
+              <step.icon size={24} />
+            </div>
+            <h3 className="text-2xl font-bold tracking-tight">{step.title}</h3>
+          </div>
+          <p className="text-gray-400 mb-6 leading-relaxed">{step.description}</p>
+          <div className={`flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary ${isEven ? 'md:justify-end' : 'md:justify-start'}`}>
+            <Clock size={14} />
+            {step.duration}
+          </div>
+        </div>
+      </div>
+
+      {/* Point on Line */}
+      <div className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-background border-2 border-white/10 z-20 hidden md:block group-hover:scale-125 transition-transform duration-500">
+        <motion.div 
+          initial={{ scale: 0 }}
+          animate={isInView ? { scale: 1 } : {}}
+          transition={{ delay: 0.5, duration: 0.5 }}
+          className="w-full h-full rounded-full bg-primary shadow-[0_0_10px_#39ff14]" 
+        />
+      </div>
+
+      {/* Spacer for mobile/desktop alignment */}
+      <div className="hidden md:block md:w-[42%]" />
+    </motion.div>
   );
 };
 
