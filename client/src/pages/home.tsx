@@ -189,6 +189,7 @@ export default function Home() {
         <Hero onOpenOrder={() => setIsOrderModalOpen(true)} />
         <Stats />
         <ResultsSection />
+        <GeographySection />
         <Achievements />
         <Services />
         <TechSection />
@@ -950,6 +951,74 @@ const Stats = () => {
         </div>
       </div>
     </section>
+  );
+};
+
+const GeographySection = () => {
+  const regions = [
+    { country: "Россия", flag: "🇷🇺", count: 35, color: "#39ff14" },
+    { country: "Украина", flag: "🇺🇦", count: 12, color: "#39ff14" },
+    { country: "Казахстан", flag: "🇰🇿", count: 8, color: "#39ff14" },
+    { country: "Беларусь", flag: "🇧🇾", count: 5, color: "#39ff14" },
+    { country: "Другие", flag: "🌍", count: 10, color: "#39ff14" },
+  ];
+
+  const maxCount = Math.max(...regions.map(r => r.count));
+
+  return (
+    <section className="py-40 bg-background relative overflow-hidden">
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="text-center mb-24">
+          <Badge className="bg-primary/10 text-primary border-primary/20 mb-6 px-6 py-2 text-sm rounded-xl tracking-widest uppercase">География</Badge>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase mb-6">Работаем по всему миру</h2>
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto">Наши проекты успешно работают в разных уголках СНГ и за его пределами</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {regions.map((region, idx) => (
+            <RegionCard key={idx} region={region} maxCount={maxCount} index={idx} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const RegionCard = ({ region, maxCount, index }: { region: any, maxCount: number, index: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={{ scale: 1.02, boxShadow: "0 0 30px rgba(57, 255, 20, 0.15)" }}
+      className="glass-premium p-8 rounded-3xl border border-white/5 group transition-all duration-500 cursor-default"
+    >
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <span className="text-4xl filter grayscale group-hover:grayscale-0 transition-all duration-500">{region.flag}</span>
+          <span className="text-2xl font-bold uppercase tracking-tighter group-hover:text-primary transition-colors">{region.country}</span>
+        </div>
+        <div className="text-right">
+          <div className="text-3xl font-black text-white group-hover:text-primary transition-colors">
+            <Counter value={region.count} isInView={isInView} />
+          </div>
+          <div className="text-xs uppercase tracking-widest text-gray-500 font-bold">Проектов</div>
+        </div>
+      </div>
+
+      <div className="relative h-3 w-full bg-white/5 rounded-full overflow-hidden">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={isInView ? { width: `${(region.count / maxCount) * 100}%` } : {}}
+          transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 + index * 0.1 }}
+          className="absolute top-0 left-0 h-full bg-primary shadow-[0_0_15px_#39ff14] rounded-full"
+        />
+      </div>
+    </motion.div>
   );
 };
 
