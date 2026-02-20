@@ -112,6 +112,7 @@ export default function Home() {
         <Portfolio />
         <Pricing onOpenOrder={() => setIsOrderModalOpen(true)} />
         <Team />
+        <Reviews />
         <FAQ />
         <CTA onOpenOrder={() => setIsOrderModalOpen(true)} />
       </main>
@@ -661,6 +662,135 @@ const Team = () => {
               </PerspectiveCard>
             </motion.div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Reviews = () => {
+  const reviews = [
+    {
+      name: "Иван Иванов",
+      role: "Владелец сервера MegaCraft",
+      text: "Сделали плагин экономики за неделю. Онлайн вырос в 3 раза! Очень доволен результатом и скоростью работы.",
+      rating: 5,
+      avatar: "ИИ"
+    },
+    {
+      name: "Дмитрий Петров",
+      role: "Тех. администратор SurvivalWorld",
+      text: "Профессионалы своего дела. Код чистый, документация полная. Интеграция прошла без сучка и задоринки.",
+      rating: 5,
+      avatar: "ДП"
+    },
+    {
+      name: "Артем Сидоров",
+      role: "Основатель SkyBlock Pro",
+      text: "Лучшая команда разработчиков для Minecraft. Реализовали сложнейшую систему квестов, которую никто не брал.",
+      rating: 5,
+      avatar: "АС"
+    },
+    {
+      name: "Максим Кузнецов",
+      role: "Владелец DungeonCraft",
+      text: "Качественная поддержка после релиза. Все мелкие правки вносились мгновенно. Рекомендую всем!",
+      rating: 4,
+      avatar: "МК"
+    },
+    {
+      name: "Елена Белова",
+      role: "Разработчик проекта Mythic",
+      text: "Отличное понимание NMS и производительности. Плагины работают стабильно даже при высоком онлайне.",
+      rating: 5,
+      avatar: "ЕБ"
+    }
+  ];
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % reviews.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [reviews.length]);
+
+  return (
+    <section className="py-60 bg-background relative overflow-hidden">
+      <div className="container mx-auto px-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-40 text-left"
+        >
+          <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.2em] font-bold uppercase hover:bg-primary/20 transition-all duration-500">Отзывы</Badge>
+          <h2 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight uppercase hover:text-primary transition-all duration-700">
+            ЧТО ГОВОРЯТ <span className="text-gray-800/30">КЛИЕНТЫ</span>
+          </h2>
+        </motion.div>
+
+        <div className="relative max-w-4xl mx-auto" ref={containerRef}>
+          <div className="overflow-hidden">
+            <motion.div 
+              className="flex"
+              animate={{ x: `-${activeIndex * 100}%` }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
+              {reviews.map((review, idx) => (
+                <div key={idx} className="min-w-full px-4">
+                  <PerspectiveCard>
+                    <Card className="glass-premium border-white/5 p-12 md:p-20 relative overflow-hidden">
+                      <div className="flex flex-col md:flex-row gap-12 items-center md:items-start">
+                        <div className="w-24 h-24 rounded-full bg-primary/20 border-2 border-primary/50 flex items-center justify-center text-primary text-3xl font-black shrink-0 shadow-[0_0_30px_rgba(57,255,20,0.2)]">
+                          {review.avatar}
+                        </div>
+                        <div className="flex-1 text-center md:text-left">
+                          <div className="flex justify-center md:justify-start gap-1 mb-6">
+                            {[...Array(5)].map((_, i) => (
+                              <Star key={i} size={20} className={i < review.rating ? "text-primary fill-primary" : "text-gray-700"} />
+                            ))}
+                          </div>
+                          <p className="text-2xl md:text-3xl font-medium text-gray-200 mb-10 leading-relaxed italic">
+                            "{review.text}"
+                          </p>
+                          <div>
+                            <h4 className="text-2xl font-bold text-white mb-2">{review.name}</h4>
+                            <p className="text-primary/60 font-bold uppercase tracking-widest text-xs">{review.role}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  </PerspectiveCard>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          <div className="flex justify-center gap-4 mt-12">
+            {reviews.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveIndex(i)}
+                className={`w-3 h-3 rounded-full transition-all duration-500 ${i === activeIndex ? "bg-primary w-12" : "bg-white/10 hover:bg-white/20"}`}
+              />
+            ))}
+          </div>
+
+          <button 
+            onClick={() => setActiveIndex((prev) => (prev - 1 + reviews.length) % reviews.length)}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 md:-translate-x-24 text-white/20 hover:text-primary transition-colors hidden lg:block"
+          >
+            <ChevronRight className="w-12 h-12 rotate-180" />
+          </button>
+          <button 
+            onClick={() => setActiveIndex((prev) => (prev + 1) % reviews.length)}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 md:translate-x-24 text-white/20 hover:text-primary transition-colors hidden lg:block"
+          >
+            <ChevronRight className="w-12 h-12" />
+          </button>
         </div>
       </div>
     </section>
