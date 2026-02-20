@@ -49,13 +49,16 @@ export function MusicPlayer() {
   };
 
   const toggleExpand = () => {
-    // Auto-start music on first interaction
-    if (!isPlaying && audioRef.current && !isExpanded) {
+    const wasMinimized = !isExpanded;
+    setIsExpanded(!isExpanded);
+    
+    // Auto-start music when expanding from minimized state
+    if (wasMinimized && !isPlaying && audioRef.current) {
+      // Play immediately on user interaction (click)
       audioRef.current.play()
         .then(() => setIsPlaying(true))
         .catch((err) => console.log("Play failed:", err));
     }
-    setIsExpanded(!isExpanded);
   };
 
   return (
