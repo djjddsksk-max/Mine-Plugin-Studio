@@ -171,6 +171,7 @@ export default function Home() {
         <Hero onOpenOrder={() => setIsOrderModalOpen(true)} />
         <Stats />
         <Services />
+        <TechSection />
         <WorkProcess />
         <Portfolio />
         <Pricing onOpenOrder={() => setIsOrderModalOpen(true)} />
@@ -184,6 +185,86 @@ export default function Home() {
     </div>
   );
 }
+
+const TechSection = () => {
+  const techGroups = [
+    {
+      name: "Server Software",
+      items: ["Spigot", "Paper", "Bukkit", "Purpur"]
+    },
+    {
+      name: "Modding Engines",
+      items: ["Forge", "Fabric", "NeoForge", "Quilt"]
+    },
+    {
+      name: "Proxies",
+      items: ["Velocity", "BungeeCord", "Waterfall"]
+    },
+    {
+      name: "Databases",
+      items: ["MySQL", "MongoDB", "Redis", "PostgreSQL"]
+    }
+  ];
+
+  const allTechs = techGroups.flatMap(group => group.items);
+
+  return (
+    <section className="py-40 bg-background relative overflow-hidden">
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="text-center mb-24">
+          <Badge className="bg-primary/10 text-primary border-primary/20 mb-6 px-6 py-2 text-sm rounded-xl tracking-widest uppercase">Стек технологий</Badge>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase">Технологии разработки</h2>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {allTechs.map((tech, idx) => (
+            <motion.div
+              key={tech}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.05 }}
+              viewport={{ once: true }}
+              animate={{
+                y: [0, -10, 0],
+              }}
+              className="perspective-1000"
+            >
+              <motion.div
+                transition={{ 
+                  y: {
+                    duration: 3 + Math.random() * 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: idx * 0.2
+                  },
+                  rotateY: { duration: 0.4 },
+                  scale: { duration: 0.4 }
+                }}
+                animate={{
+                  y: [0, -15, 0],
+                }}
+                whileHover={{ 
+                  rotateY: 25, 
+                  scale: 1.1,
+                  boxShadow: "0 0 30px rgba(57, 255, 20, 0.4)" 
+                }}
+                className="bg-[#0a0a0a] border border-white/5 rounded-3xl p-8 h-40 flex flex-col items-center justify-center group cursor-default transition-all duration-500 hover:border-primary/50 relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative z-10 text-center">
+                  <div className="text-primary/40 group-hover:text-primary transition-colors mb-2">
+                    <Box className="w-8 h-8 mx-auto" />
+                  </div>
+                  <span className="text-xl font-bold tracking-tight text-gray-400 group-hover:text-white transition-colors uppercase">{tech}</span>
+                </div>
+              </motion.div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const Navbar = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
   const [scrolled, setScrolled] = useState(false);
