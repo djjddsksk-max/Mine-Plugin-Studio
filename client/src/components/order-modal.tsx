@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const formSchema = z.object({
   name: z.string().min(2, "Имя слишком короткое"),
@@ -32,12 +32,12 @@ const formSchema = z.object({
   contact: z.string().min(3, "Укажите Discord или Telegram"),
 });
 
-export function OrderModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+export function OrderModal({ isOpen, onClose, initialValues }: { isOpen: boolean; onClose: () => void; initialValues?: any }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: initialValues || {
       name: "",
       email: "",
       projectType: "plugin",
@@ -46,6 +46,12 @@ export function OrderModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
       contact: "",
     },
   });
+
+  useEffect(() => {
+    if (initialValues) {
+      form.reset(initialValues);
+    }
+  }, [initialValues, form]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);

@@ -30,6 +30,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { OrderModal } from "@/components/order-modal";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const PerspectiveCard = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
   const x = useMotionValue(0);
@@ -159,6 +161,7 @@ const CyberBackground = () => {
 
 export default function Home() {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [calculatorData, setCalculatorData] = useState<any>(null);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
@@ -174,6 +177,10 @@ export default function Home() {
         <TechSection />
         <WorkProcess />
         <Portfolio />
+        <PriceCalculator onOrder={(data) => {
+          setCalculatorData(data);
+          setIsOrderModalOpen(true);
+        }} />
         <Pricing onOpenOrder={() => setIsOrderModalOpen(true)} />
         <Team />
         <Reviews />
@@ -181,10 +188,180 @@ export default function Home() {
         <CTA onOpenOrder={() => setIsOrderModalOpen(true)} />
       </main>
       <Footer />
-      <OrderModal isOpen={isOrderModalOpen} onClose={() => setIsOrderModalOpen(false)} />
+      <OrderModal 
+        isOpen={isOrderModalOpen} 
+        onClose={() => {
+          setIsOrderModalOpen(false);
+          setCalculatorData(null);
+        }} 
+        initialValues={calculatorData}
+      />
     </div>
   );
 }
+
+const PriceCalculator = ({ onOrder }: { onOrder: (data: any) => void }) => {
+  const [type, setType] = useState("plugin");
+  const [complexity, setComplexity] = useState("1");
+  const [isUrgent, setIsUrgent] = useState(false);
+  const [options, setOptions] = useState<string[]>([]);
+
+  const basePrices: Record<string, number> = {
+    plugin: 10000,
+    mod: 15000,
+    server: 30000,
+    consultation: 5000
+  };
+
+  const optionPrices: Record<string, number> = {
+    gui: 5000,
+    db: 8000,
+    api: 10000,
+    admin: 12000
+  };
+
+  const calculateTotal = () => {
+    let total = basePrices[type];
+    total *= parseFloat(complexity);
+    
+    options.forEach(opt => {
+      total += optionPrices[opt];
+    });
+
+    if (isUrgent) {
+      total *= 1.5;
+    }
+
+    return Math.round(total);
+  };
+
+  const [displayPrice, setDisplayPrice] = useState(calculateTotal());
+
+  useEffect(() => {
+    const targetPrice = calculateTotal();
+    const duration = 1000;
+    const startTime = Date.now();
+    const startPrice = displayPrice;
+
+    const animate = () => {
+      const now = Date.now();
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = 1 - Math.pow(1 - progress, 4);
+      
+      const current = Math.floor(startPrice + (targetPrice - startPrice) * easedProgress);
+      setDisplayPrice(current);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+    requestAnimationFrame(animate);
+  }, [type, complexity, isUrgent, options]);
+
+  const toggleOption = (opt: string) => {
+    setOptions(prev => prev.includes(opt) ? prev.filter(o => o !== opt) : [...prev, opt]);
+  };
+
+  return (
+    <section className="py-40 bg-[#080808] relative overflow-hidden border-y border-white/5">
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge className="bg-primary/10 text-primary border-primary/20 mb-6 px-6 py-2 text-sm rounded-xl tracking-widest uppercase">Калькулятор</Badge>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase mb-6">Рассчитайте стоимость</h2>
+            <p className="text-gray-400 text-lg">Выберите параметры вашего идеального проекта</p>
+          </div>
+
+          <div className="glass-premium p-8 md:p-12 rounded-[40px] border border-white/5 shadow-2xl">
+            <div className="grid md:grid-cols-2 gap-12 mb-12">
+              <div className="space-y-8">
+                <div>
+                  <label className="text-xs uppercase tracking-[0.2em] font-bold text-gray-500 mb-4 block">Тип проекта</label>
+                  <Select value={type} onValueChange={setType}>
+                    <SelectTrigger className="h-14 bg-white/5 border-white/10 rounded-2xl text-lg font-bold focus:ring-primary/50">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-[#0f0f0f] border-white/10">
+                      <SelectItem value="plugin">Плагин (+10к₽)</SelectItem>
+                      <SelectItem value="mod">Мод (+15к₽)</SelectItem>
+                      <SelectItem value="server">Сервер (+30к₽)</SelectItem>
+                      <SelectItem value="consultation">Консультация (+5к₽)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="text-xs uppercase tracking-[0.2em] font-bold text-gray-500 mb-4 block">Сложность</label>
+                  <Select value={complexity} onValueChange={setComplexity}>
+                    <SelectTrigger className="h-14 bg-white/5 border-white/10 rounded-2xl text-lg font-bold focus:ring-primary/50">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-[#0f0f0f] border-white/10">
+                      <SelectItem value="1">Простой (x1.0)</SelectItem>
+                      <SelectItem value="1.5">Средний (x1.5)</SelectItem>
+                      <SelectItem value="2.5">Сложный (x2.5)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex items-center gap-4 p-6 rounded-2xl bg-primary/5 border border-primary/10 cursor-pointer group transition-all hover:bg-primary/10" onClick={() => setIsUrgent(!isUrgent)}>
+                  <Checkbox checked={isUrgent} onCheckedChange={() => setIsUrgent(!isUrgent)} />
+                  <div className="flex-1">
+                    <div className="font-bold text-lg group-hover:text-primary transition-colors">Срочный заказ</div>
+                    <div className="text-sm text-gray-400">+50% к стоимости, приоритетная разработка</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <label className="text-xs uppercase tracking-[0.2em] font-bold text-gray-500 mb-2 block">Дополнительные опции</label>
+                {[
+                  { id: "gui", label: "Интерфейс (GUI)", price: "+5к₽" },
+                  { id: "db", label: "База данных", price: "+8к₽" },
+                  { id: "api", label: "API интеграция", price: "+10к₽" },
+                  { id: "admin", label: "Админ панель", price: "+12к₽" }
+                ].map((opt) => (
+                  <div 
+                    key={opt.id}
+                    onClick={() => toggleOption(opt.id)}
+                    className={`flex items-center justify-between p-5 rounded-2xl border transition-all cursor-pointer group ${options.includes(opt.id) ? 'bg-primary/10 border-primary/30' : 'bg-white/5 border-white/5 hover:border-white/10'}`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <Checkbox checked={options.includes(opt.id)} />
+                      <span className={`font-bold transition-colors ${options.includes(opt.id) ? 'text-primary' : 'text-gray-300'}`}>{opt.label}</span>
+                    </div>
+                    <span className="text-sm font-mono text-gray-500 group-hover:text-primary transition-colors">{opt.price}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
+              <div className="text-center md:text-left">
+                <div className="text-xs uppercase tracking-[0.3em] font-bold text-gray-500 mb-2">Предварительная стоимость</div>
+                <div className="text-6xl md:text-8xl font-black text-primary text-glow-strong tracking-tighter">
+                  {displayPrice.toLocaleString()} <span className="text-4xl md:text-6xl">₽</span>
+                </div>
+              </div>
+              
+              <Button 
+                size="lg"
+                onClick={() => onOrder({
+                  projectType: type,
+                  description: `Рассчитано в калькуляторе:\nСложность: ${complexity}x\nСрочно: ${isUrgent ? 'Да' : 'Нет'}\nОпции: ${options.join(', ')}\nИтоговая цена: ${displayPrice}₽`
+                })}
+                className="h-24 md:h-32 px-12 md:px-20 bg-primary text-black hover:bg-white rounded-[32px] text-2xl md:text-4xl font-black shadow-[0_20px_60px_rgba(57,255,20,0.4)] hover:-translate-y-2 transition-all active:scale-95 uppercase tracking-tighter group"
+              >
+                ЗАКАЗАТЬ <ChevronRight className="w-8 h-8 md:w-12 md:h-12 ml-4 group-hover:translate-x-2 transition-transform" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const TechSection = () => {
   const techGroups = [
