@@ -76,7 +76,7 @@ export function MusicPlayer() {
             animate={{ y: 0, scale: 1 }}
             exit={{ y: -100, scale: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            className="fixed top-4 left-1/2 -translate-x-1/2 z-[150] cursor-pointer"
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-[150] cursor-pointer"
             onClick={toggleExpand}
           >
             <motion.div

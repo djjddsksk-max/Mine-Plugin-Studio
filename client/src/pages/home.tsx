@@ -208,7 +208,7 @@ const Navbar = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
           <span className="text-2xl font-bold font-display tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">BLOCK<span className="text-primary">FORGE</span></span>
         </motion.div>
 
-        <div className="hidden md:flex items-center gap-12">
+        <div className="hidden md:flex items-center gap-6">
           {["Услуги", "Портфолио", "Цены", "Команда"].map((item) => (
             <motion.a 
               key={item}
