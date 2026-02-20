@@ -202,14 +202,18 @@ interface FeatureCardProps {
 
 const FeatureCard = ({ icon: Icon, title, description, delay }: FeatureCardProps) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, z: -100, rotateX: 45 }}
-      animate={isInView ? { opacity: 1, z: 0, rotateX: 0 } : {}}
-      transition={{ delay, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0, y: 50, scale: 0.9, rotateX: 15 }}
+      animate={isInView ? { opacity: 1, y: 0, scale: 1, rotateX: 0 } : {}}
+      transition={{ 
+        delay: delay * 1.5, 
+        duration: 1.2, 
+        ease: [0.16, 1, 0.3, 1] 
+      }}
       className="group perspective-1000"
     >
       <PerspectiveCard className="h-full">
@@ -231,10 +235,18 @@ const FeatureCard = ({ icon: Icon, title, description, delay }: FeatureCardProps
 };
 
 const Services = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
   return (
-    <section id="services" className="py-60 bg-background relative">
+    <section id="services" ref={ref} className="py-60 bg-background relative">
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-24 items-end mb-40">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="grid lg:grid-cols-2 gap-24 items-end mb-40"
+        >
           <div className="relative z-10">
             <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-8 py-2 text-sm rounded-2xl tracking-[0.2em] font-bold uppercase hover:bg-primary/20 transition-all duration-500 cursor-default">Наши Возможности</Badge>
             <h2 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight uppercase relative z-10 hover:text-primary transition-all duration-700 ease-in-out cursor-default group/title">
@@ -244,7 +256,7 @@ const Services = () => {
           <p className="text-lg md:text-xl text-gray-400 font-medium leading-relaxed max-w-md relative z-20 hover:text-white transition-all duration-700 ease-in-out">
             От кастомных JVM-оптимизаций до нейронных сетей внутри игровых движков. Мы не знаем границ.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-12 relative z-10">
           <FeatureCard icon={Cpu} title="Ядро Системы" description="Разработка нативных плагинов с прямым доступом к памяти для экстремальной производительности." delay={0.1} />
