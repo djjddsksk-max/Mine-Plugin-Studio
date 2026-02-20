@@ -1,16 +1,38 @@
 import { useState, useEffect } from "react";
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import LoadingScreen from "@/components/loading-screen";
 import { CustomCursor } from "@/components/custom-cursor";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 
+function ReadingProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  return (
+    <motion.div
+      className="fixed top-0 left-0 right-0 h-1 bg-primary z-50 origin-left"
+      style={{ scaleX }}
+    />
+  );
+}
+
 function Router() {
+  const [location] = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location]);
+
   return (
     <Switch>
       <Route path="/" component={Home} />
@@ -26,6 +48,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <CustomCursor />
+        <ReadingProgress />
         <AnimatePresence mode="wait">
           {isLoading ? (
             <LoadingScreen key="loader" onLoadingComplete={() => setIsLoading(false)} />

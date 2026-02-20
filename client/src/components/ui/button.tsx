@@ -2,6 +2,7 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import { motion, AnimatePresence } from "framer-motion"
+import { Loader2, Check } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -39,10 +40,13 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  loading?: boolean
+  success?: boolean
+  error?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, loading, success, error, ...props }, ref) => {
     const [ripples, setRipples] = React.useState<Array<{ x: number; y: number; id: number }>>([])
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -62,11 +66,18 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref as any}
         onClick={handleClick}
+        animate={
+          error 
+            ? { x: [-4, 4, -4, 4, 0], transition: { duration: 0.4 } }
+            : success
+            ? { scale: [1, 1.1, 1], transition: { duration: 0.3 } }
+            : {}
+        }
         whileHover={{ 
-          scale: 1.05,
-          boxShadow: "0 0 20px rgba(57, 255, 20, 0.4)"
+          scale: 1.02,
         }}
-        whileTap={{ scale: 0.95 }}
+        whileTap={{ scale: 0.98 }}
+        disabled={loading || props.disabled}
         {...props}
       >
         <AnimatePresence>
@@ -77,7 +88,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               animate={{ scale: 10, opacity: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.6 }}
-              className="absolute bg-white/30 rounded-full pointer-events-none"
+              className="absolute bg-white/20 rounded-full pointer-events-none"
               style={{
                 left: ripple.x,
                 top: ripple.y,
@@ -88,12 +99,19 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             />
           ))}
         </AnimatePresence>
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full"
-          animate={{ x: ["100%", "-100%"] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-        />
-        <span className="relative z-10 flex items-center gap-2">{props.children}</span>
+        
+        <span className="relative z-10 flex items-center justify-center gap-2">
+          {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+          {success && !loading && <Check className="h-4 w-4" />}
+          <span className={cn(loading || success ? "opacity-0 invisible" : "opacity-100")}>
+            {props.children}
+          </span>
+          {(loading || success) && (
+            <span className="absolute inset-0 flex items-center justify-center">
+               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+            </span>
+          )}
+        </span>
       </motion.button>
     )
   }

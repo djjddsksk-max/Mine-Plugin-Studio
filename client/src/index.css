@@ -34,6 +34,9 @@
   * {
     @apply border-border;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply font-sans antialiased bg-background text-white selection:bg-primary/30 selection:text-primary overflow-x-hidden;
   }
