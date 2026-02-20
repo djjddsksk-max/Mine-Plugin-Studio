@@ -55,21 +55,7 @@ export function MusicPlayer() {
   };
 
   const toggleExpand = () => {
-    const wasMinimized = !isExpanded;
     setIsExpanded(!isExpanded);
-    
-    // Auto-start music when expanding from minimized state
-    if (wasMinimized && !isPlaying && audioRef.current) {
-      audioRef.current.play()
-        .then(() => setIsPlaying(true))
-        .catch((err) => console.log("Play failed:", err));
-    }
-    
-    // Pause when minimizing
-    if (!wasMinimized && isPlaying && audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    }
   };
 
   return (
