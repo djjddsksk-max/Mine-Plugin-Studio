@@ -436,18 +436,27 @@ const FeatureCard = ({ icon: Icon, title, description, delay }: FeatureCardProps
       className="group perspective-1000"
     >
       <PerspectiveCard className="h-full">
-        <div className="glass-premium p-12 rounded-[40px] h-full relative group transition-all duration-700 hover:border-primary/50">
+        <motion.div 
+          whileHover={{ 
+            scale: 1.03,
+            rotateY: 5,
+            rotateX: -5,
+            boxShadow: "0 0 40px rgba(57, 255, 20, 0.2)"
+          }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="glass-premium p-12 rounded-[40px] h-full relative group border border-white/5 hover:border-primary/50"
+        >
           <div className="w-24 h-24 rounded-[30px] bg-primary/10 flex items-center justify-center mb-10 group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-500">
             <Icon className="w-12 h-12 text-primary" />
           </div>
-          <h3 className="text-3xl font-bold mb-6 tracking-tight group-hover:text-primary transition-all duration-700 ease-out hover:translate-x-2">{title}</h3>
+          <h3 className="text-3xl font-bold mb-6 tracking-tight group-hover:text-primary transition-all duration-700 ease-out">{title}</h3>
           <p className="text-gray-400 text-lg leading-relaxed font-medium group-hover:text-gray-200 transition-colors">
             {description}
           </p>
           <div className="mt-12 flex items-center gap-4 text-primary font-bold tracking-widest text-sm opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0">
              СТАТУС: АКТИВЕН <ChevronRight className="w-4 h-4" />
           </div>
-        </div>
+        </motion.div>
       </PerspectiveCard>
     </motion.div>
   );
@@ -671,34 +680,56 @@ const Portfolio = () => {
             <motion.div
               key={project.title}
               initial={{ opacity: 0, y: 50 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ delay: idx * 0.1, duration: 0.8 }}
             >
               <PerspectiveCard className="h-full">
-                <Card className="glass-premium border-white/5 overflow-hidden h-full group">
-                  <div className="relative h-48 overflow-hidden">
-                    <img 
-                      src={project.image} 
-                      alt={project.title} 
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
-                    />
-                    <div className="absolute inset-0 bg-black/60 opacity-60 group-hover:opacity-20 transition-opacity" />
-                  </div>
-                  <CardContent className="p-8">
-                    <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">{project.title}</h3>
-                    <p className="text-gray-400 mb-6 line-clamp-2">{project.description}</p>
-                    <div className="flex flex-wrap gap-2 mb-8">
-                      {project.tags.map(tag => (
-                        <span key={tag} className="text-[10px] uppercase tracking-wider font-bold px-2 py-1 bg-white/5 border border-white/10 rounded text-gray-500 group-hover:text-primary/70 group-hover:border-primary/20 transition-colors">
-                          {tag}
-                        </span>
-                      ))}
+                <motion.div
+                  whileHover={{ 
+                    scale: 1.03,
+                    rotateY: 5,
+                    rotateX: -5,
+                    boxShadow: "0 0 40px rgba(57, 255, 20, 0.2)"
+                  }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                >
+                  <Card className="glass-premium border-white/5 overflow-hidden h-full group">
+                    <div className="relative h-48 overflow-hidden">
+                      <motion.img 
+                        src={project.image} 
+                        alt={project.title} 
+                        whileHover={{ scale: 1.15, rotate: 2 }}
+                        transition={{ duration: 0.7 }}
+                        className="w-full h-full object-cover grayscale group-hover:grayscale-0"
+                      />
+                      <motion.div 
+                        initial={{ opacity: 0.6 }}
+                        whileHover={{ opacity: 0 }}
+                        className="absolute inset-0 bg-black/60 transition-opacity" 
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <div className="bg-primary/90 text-black p-4 rounded-full scale-50 group-hover:scale-100 transition-transform duration-500">
+                          <Search size={24} />
+                        </div>
+                      </div>
                     </div>
-                    <Button variant="outline" className="w-full border-primary/20 text-primary hover:bg-primary hover:text-black font-bold uppercase tracking-widest text-xs py-6 transition-all">
-                      ПОДРОБНЕЕ
-                    </Button>
-                  </CardContent>
-                </Card>
+                    <CardContent className="p-8">
+                      <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">{project.title}</h3>
+                      <p className="text-gray-400 mb-6 line-clamp-2">{project.description}</p>
+                      <div className="flex flex-wrap gap-2 mb-8">
+                        {project.tags.map(tag => (
+                          <span key={tag} className="text-[10px] uppercase tracking-wider font-bold px-2 py-1 bg-white/5 border border-white/10 rounded text-gray-500 group-hover:text-primary/70 group-hover:border-primary/20 transition-colors">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <Button variant="outline" className="w-full border-primary/20 text-primary hover:bg-primary hover:text-black font-bold uppercase tracking-widest text-xs py-6 transition-all relative overflow-hidden">
+                        ПОДРОБНЕЕ
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               </PerspectiveCard>
             </motion.div>
           ))}
