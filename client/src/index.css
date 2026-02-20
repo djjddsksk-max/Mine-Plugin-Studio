@@ -1,0 +1,90 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Inter', system-ui, sans-serif;
+  --font-minecraft: 'Inter', system-ui, sans-serif;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+
+  --color-background: hsl(240 10% 2%);
+  --color-foreground: hsl(0 0% 98%);
+
+  --color-card: hsl(240 10% 4%);
+  --color-card-foreground: hsl(0 0% 98%);
+
+  --color-primary: hsl(142 70% 50%);
+  --color-primary-foreground: hsl(144 100% 5%);
+  --color-secondary: hsl(262 80% 50%);
+  --color-accent: hsl(142 70% 50%);
+  --color-border: hsl(240 5% 10%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply font-sans antialiased bg-background text-white selection:bg-primary/30 selection:text-primary overflow-x-hidden;
+  }
+}
+
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .glass-premium {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+    backdrop-blur: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  .text-glow-strong {
+    text-shadow: 0 0 30px hsl(var(--primary) / 0.6), 0 0 60px hsl(var(--primary) / 0.2);
+  }
+
+  .mask-radial {
+    mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
+  }
+
+  @keyframes float-3d {
+    0%, 100% { transform: translateZ(20px) translateY(0px) rotateX(5deg) rotateY(-5deg); }
+    50% { transform: translateZ(50px) translateY(-20px) rotateX(-5deg) rotateY(5deg); }
+  }
+
+  .animate-float-3d {
+    animation: float-3d 6s ease-in-out infinite;
+  }
+
+  .scanline {
+    width: 100%;
+    height: 100px;
+    z-index: 5;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(57, 255, 20, 0.05) 50%, rgba(0, 0, 0, 0) 100%);
+    opacity: 0.1;
+    position: absolute;
+    bottom: 100%;
+    animation: scanline 10s linear infinite;
+  }
+
+  @keyframes scanline {
+    0% { bottom: 100%; }
+    100% { bottom: -100px; }
+  }
+}
