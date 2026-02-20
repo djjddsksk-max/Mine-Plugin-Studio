@@ -26,7 +26,11 @@ import {
   CheckCircle,
   Rocket,
   User,
-  Send
+  Send,
+  Trophy,
+  Download,
+  Shield,
+  Server
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -176,6 +180,7 @@ export default function Home() {
       <main>
         <Hero onOpenOrder={() => setIsOrderModalOpen(true)} />
         <Stats />
+        <Achievements />
         <Services />
         <TechSection />
         <WorkProcess />
@@ -639,6 +644,55 @@ const Stats = () => {
               <div className="text-xs md:text-sm uppercase tracking-widest font-bold text-gray-500 group-hover:text-gray-300 transition-colors">
                 {stat.label}
               </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Achievements = () => {
+  const achievements = [
+    { label: "Топ-10 на SpigotMC", icon: Trophy },
+    { label: "5000+ скачиваний", icon: Download },
+    { label: "99.9% Uptime", icon: Shield },
+    { label: "50+ серверов", icon: Server },
+    { label: "24/7 Поддержка", icon: Clock },
+    { label: "5 лет опыта", icon: Star },
+  ];
+
+  return (
+    <section className="py-20 bg-background relative overflow-hidden">
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 max-w-5xl mx-auto">
+          {achievements.map((item, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1, duration: 0.5 }}
+              className="flex flex-col items-center group cursor-default"
+            >
+              <motion.div
+                whileHover={{ 
+                  rotate: 360, 
+                  scale: 1.1,
+                  filter: "drop-shadow(0 0 15px #39ff14)"
+                }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+                className="w-32 h-36 relative flex items-center justify-center bg-white/5 border border-primary/20 transition-colors group-hover:border-primary group-hover:bg-primary/5 mb-6"
+                style={{
+                  clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)"
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <item.icon className="w-12 h-12 text-primary relative z-10" />
+              </motion.div>
+              <span className="text-sm md:text-base font-bold uppercase tracking-widest text-center text-gray-400 group-hover:text-white transition-colors max-w-[150px]">
+                {item.label}
+              </span>
             </motion.div>
           ))}
         </div>
