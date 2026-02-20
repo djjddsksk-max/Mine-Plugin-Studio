@@ -528,6 +528,100 @@ const Navbar = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
   );
 };
 
+const CodeBackground = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    const fontSize = 16;
+    const columns = Math.ceil(window.innerWidth / 150); // Fewer columns for better readability
+    const codeLines = [
+      "public class Plugin extends JavaPlugin",
+      "player.sendMessage(\"§aSuccess!\");",
+      "@EventHandler",
+      "if (player.hasPermission(\"admin\"))",
+      "public void onEnable() {",
+      "getServer().getPluginManager()",
+      "event.setCancelled(true);",
+      "ItemStack item = new ItemStack();",
+      "getConfig().getString(\"message\");",
+      "Bukkit.getScheduler().runTask();"
+    ];
+
+    let drops: Array<{
+      x: number;
+      y: number;
+      text: string;
+      speed: number;
+      opacity: number;
+      highlight: boolean;
+    }> = [];
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initDrops();
+    };
+
+    const initDrops = () => {
+      drops = [];
+      const columnCount = Math.floor(canvas.width / 250);
+      for (let i = 0; i < columnCount; i++) {
+        drops.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          text: codeLines[Math.floor(Math.random() * codeLines.length)],
+          speed: 0.5 + Math.random() * 1.5,
+          opacity: 0.05 + Math.random() * 0.05,
+          highlight: Math.random() > 0.8
+        });
+      }
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.font = `bold ${fontSize}px font-mono, monospace`;
+
+      drops.forEach((drop) => {
+        const currentOpacity = drop.highlight ? 0.2 : drop.opacity;
+        ctx.fillStyle = `rgba(57, 255, 20, ${currentOpacity})`;
+        ctx.fillText(drop.text, drop.x, drop.y);
+
+        drop.y -= drop.speed;
+
+        if (drop.y < -20) {
+          drop.y = canvas.height + 20;
+          drop.x = Math.random() * canvas.width;
+          drop.text = codeLines[Math.floor(Math.random() * codeLines.length)];
+          drop.highlight = Math.random() > 0.8;
+        }
+      });
+
+      animationFrameId = requestAnimationFrame(draw);
+    };
+
+    window.addEventListener("resize", resize);
+    resize();
+    draw();
+
+    return () => {
+      window.removeEventListener("resize", resize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-40">
+      <canvas ref={canvasRef} className="w-full h-full" />
+    </div>
+  );
+};
+
 const Hero = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 1000], [0, 400]);
@@ -535,6 +629,7 @@ const Hero = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 perspective-1000">
+      <CodeBackground />
       <div className="absolute inset-0 z-0 overflow-hidden">
         <motion.div style={{ y, rotate }} className="scale-110">
            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background z-10" />
