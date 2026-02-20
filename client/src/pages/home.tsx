@@ -138,12 +138,12 @@ const Hero = () => {
             transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
             className="preserve-3d"
           >
-            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-primary/5 border border-primary/10 mb-12 backdrop-blur-3xl animate-float-3d">
-              <Sparkles className="w-5 h-5 text-primary" />
-              <span className="text-sm font-bold uppercase tracking-[0.4em] text-primary/80">Виртуальный Архитектор Нового Поколения</span>
+            <div className="inline-flex items-center gap-3 px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl bg-primary/5 border border-primary/10 mb-8 md:mb-12 backdrop-blur-3xl animate-float-3d">
+              <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-primary" />
+              <span className="text-[10px] md:text-sm font-bold uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary/80">Виртуальный Архитектор Нового Поколения</span>
             </div>
             
-            <h1 className="text-5xl md:text-[8rem] font-bold font-display mb-12 leading-[1.1] tracking-tight preserve-3d">
+            <h1 className="text-4xl sm:text-6xl md:text-[8rem] font-bold font-display mb-8 md:mb-12 leading-[1.1] tracking-tight preserve-3d">
               <motion.span 
                 initial={{ y: 100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -175,14 +175,14 @@ const Hero = () => {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, duration: 1 }}
-              className="flex flex-col md:flex-row justify-center gap-8"
+              className="flex flex-col sm:flex-row justify-center gap-4 md:gap-8 px-4"
             >
-              <PerspectiveCard>
-                <Button size="xl" className="bg-primary text-black hover:bg-white font-bold text-3xl px-16 h-24 rounded-3xl shadow-[0_20px_50px_rgba(57,255,20,0.4)] transition-all">
+              <PerspectiveCard className="w-full sm:w-auto">
+                <Button size="xl" className="w-full sm:w-auto bg-primary text-black hover:bg-white font-bold text-xl md:text-3xl px-8 md:px-16 h-16 md:h-24 rounded-2xl md:rounded-3xl shadow-[0_20px_50px_rgba(57,255,20,0.4)] transition-all">
                   НАЧАТЬ ПРОЕКТ
                 </Button>
               </PerspectiveCard>
-              <Button size="xl" variant="outline" className="border-white/5 hover:bg-white/5 font-bold text-3xl px-16 h-24 rounded-3xl backdrop-blur-3xl">
+              <Button size="xl" variant="outline" className="w-full sm:w-auto border-white/5 hover:bg-white/5 font-bold text-xl md:text-3xl px-8 md:px-16 h-16 md:h-24 rounded-2xl md:rounded-3xl backdrop-blur-3xl">
                 ПОРТФОЛИО
               </Button>
             </motion.div>
@@ -353,18 +353,18 @@ export default function Home() {
         <Services />
         <section className="py-60 container mx-auto px-6 text-center">
            <motion.div 
-             whileInView={{ scale: [0.9, 1], opacity: [0, 1] }}
-             viewport={{ once: true }}
-             className="glass-premium p-24 md:p-48 rounded-[80px] relative overflow-hidden group"
-           >
-              <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-              <div className="relative z-10">
-                <h2 className="text-7xl md:text-[12rem] font-bold mb-16 tracking-tightest leading-none">ГОТОВЫ <br /> <span className="text-primary">ВЗЛЕТАТЬ?</span></h2>
-                <Button size="xl" className="bg-primary text-black hover:bg-white font-bold text-4xl px-20 h-32 rounded-[40px] shadow-[0_30px_100px_rgba(57,255,20,0.5)] transition-all transform hover:-translate-y-4">
-                   СВЯЗАТЬСЯ С НАМИ
-                </Button>
-              </div>
-           </motion.div>
+          whileInView={{ scale: [0.95, 1], opacity: [0, 1] }}
+          viewport={{ once: true }}
+          className="glass-premium p-12 md:p-48 rounded-[40px] md:rounded-[80px] relative overflow-hidden group"
+        >
+          <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+          <div className="relative z-10">
+            <h2 className="text-4xl md:text-[12rem] font-bold mb-8 md:mb-16 tracking-tightest leading-none uppercase">ГОТОВЫ <br /> <span className="text-primary">ВЗЛЕТАТЬ?</span></h2>
+            <Button size="xl" className="w-full md:w-auto bg-primary text-black hover:bg-white font-bold text-2xl md:text-4xl px-10 md:px-20 h-20 md:h-32 rounded-2xl md:rounded-[40px] shadow-[0_30px_100px_rgba(57,255,20,0.5)] transition-all transform hover:-translate-y-4">
+              СВЯЗАТЬСЯ С НАМИ
+            </Button>
+          </div>
+        </motion.div>
         </section>
       </main>
       <Footer />
