@@ -176,6 +176,7 @@ export default function Home() {
         <Services />
         <TechSection />
         <WorkProcess />
+        <ProcessVisualization />
         <Portfolio />
         <PriceCalculator onOrder={(data) => {
           setCalculatorData(data);
@@ -923,6 +924,125 @@ const ProcessStep = ({ step, index }: { step: any, index: number }) => {
       {/* Spacer / Step Number */}
       <div className={`hidden md:flex md:w-[42%] opacity-5 text-[10rem] font-black italic tracking-tighter pointer-events-none select-none ${isEven ? 'justify-start' : 'justify-end'}`}>
         0{index + 1}
+      </div>
+    </motion.div>
+  );
+};
+
+const ProcessVisualization = () => {
+  const visualizationSteps = [
+    {
+      title: "Анализ требований",
+      percentage: 10,
+      icon: Search,
+      description: "Глубокое погружение в бизнес-логику"
+    },
+    {
+      title: "Проектирование",
+      percentage: 15,
+      icon: Layout,
+      description: "Архитектура и UX прототипирование"
+    },
+    {
+      title: "Разработка",
+      percentage: 50,
+      icon: Code,
+      description: "Написание чистого и эффективного кода"
+    },
+    {
+      title: "Тестирование",
+      percentage: 15,
+      icon: ShieldCheck,
+      description: "QA аудит и стресс-тестирование"
+    },
+    {
+      title: "Деплой и поддержка",
+      percentage: 10,
+      icon: Rocket,
+      description: "Запуск и техническое сопровождение"
+    }
+  ];
+
+  return (
+    <section className="py-40 bg-[#050505] relative overflow-hidden border-y border-white/5">
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-24">
+            <Badge className="bg-primary/10 text-primary border-primary/20 mb-6 px-6 py-2 text-sm rounded-xl tracking-widest uppercase">Таймлайн</Badge>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase mb-6">Распределение <span className="text-primary">времени</span></h2>
+            <p className="text-gray-400 text-lg">Как мы оптимизируем процесс разработки для достижения результата</p>
+          </div>
+
+          <div className="space-y-12">
+            {visualizationSteps.map((step, idx) => (
+              <ProgressBar key={idx} step={step} index={idx} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ProgressBar = ({ step, index }: { step: any, index: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (isInView) {
+      let start = 0;
+      const end = step.percentage;
+      const duration = 2000;
+      const increment = end / (duration / 16);
+      
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= end) {
+          setCount(end);
+          clearInterval(timer);
+        } else {
+          setCount(Math.floor(start));
+        }
+      }, 16);
+      
+      return () => clearInterval(timer);
+    }
+  }, [isInView, step.percentage]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: -50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.1, duration: 0.8, ease: "easeOut" }}
+      viewport={{ once: true }}
+      className="group"
+    >
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-black transition-all duration-500">
+            <step.icon size={24} />
+          </div>
+          <div>
+            <h3 className="text-xl font-bold tracking-tight group-hover:text-primary transition-colors">{step.title}</h3>
+            <p className="text-xs text-gray-500 uppercase tracking-wider">{step.description}</p>
+          </div>
+        </div>
+        <div className="text-3xl font-black font-mono text-primary text-glow-small">
+          {count}%
+        </div>
+      </div>
+      
+      <div className="h-3 w-full bg-white/5 rounded-full overflow-hidden border border-white/5 relative">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={isInView ? { width: `${step.percentage}%` } : {}}
+          transition={{ duration: 2, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 }}
+          className="h-full bg-gradient-to-r from-primary/40 via-primary to-primary shadow-[0_0_20px_rgba(57,255,20,0.3)] relative"
+        >
+          <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.2)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.2)_50%,rgba(255,255,255,0.2)_75%,transparent_75%,transparent)] bg-[length:20px_20px] animate-shimmer opacity-20" />
+        </motion.div>
       </div>
     </motion.div>
   );
