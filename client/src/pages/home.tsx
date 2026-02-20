@@ -343,10 +343,10 @@ const Hero = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
 
 const Stats = () => {
   const stats = [
-    { label: "Проектов завершено", value: 150, suffix: "+" },
+    { label: "Завершенных проектов", value: 150, suffix: "+" },
     { label: "Довольных клиентов", value: 50, suffix: "+" },
-    { label: "Время работы", value: 99.9, suffix: "%" },
-    { label: "Техподдержка", value: "24/7", suffix: "" },
+    { label: "Uptime серверов", value: 99.9, suffix: "%" },
+    { label: "Поддержка", value: "24/7", suffix: "" },
   ];
 
   const { scrollYProgress } = useScroll();
@@ -882,9 +882,9 @@ const Pricing = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
 
 const Team = () => {
   const members = [
-    { name: "ALEX", role: "Lead Developer", skills: ["Java", "Kotlin", "NMS"], color: "from-green-500/20" },
-    { name: "MAX", role: "3D Modeler", skills: ["Blockbench", "Forge", "Fabric"], color: "from-blue-500/20" },
-    { name: "NICK", role: "Systems Architect", skills: ["Network", "Security", "DB"], color: "from-purple-500/20" }
+    { name: "ALEX", role: "Главный разработчик", skills: ["Java", "Kotlin", "NMS"], color: "from-green-500/20" },
+    { name: "MAX", role: "3D художник", skills: ["Blockbench", "Forge", "Fabric"], color: "from-blue-500/20" },
+    { name: "NICK", role: "Системный архитектор", skills: ["Network", "Security", "DB"], color: "from-purple-500/20" }
   ];
 
   return (
@@ -1067,9 +1067,9 @@ const Reviews = () => {
 
 const FAQ = () => {
   const faqs = [
-    { q: "Как долго длится разработка?", a: "От 3 дней до месяца, в зависимости от сложности." },
-    { q: "Предоставляете ли вы исходный код?", a: "Да, после полной оплаты вы получаете весь исходный код проекта." },
-    { q: "Какие версии Minecraft поддерживаете?", a: "Мы работаем со всеми актуальными версиями от 1.8.8 до 1.21+." }
+    { q: "Сколько времени занимает разработка?", a: "Простые плагины - 3-7 дней. Сложные системы - 2-4 недели. Полный сервер - 1-3 месяца." },
+    { q: "Получу ли я исходный код?", a: "Да! После оплаты вы получаете весь исходный код, документацию и права на использование." },
+    { q: "Какие версии Minecraft поддерживаете?", a: "Работаем со всеми версиями от 1.8.8 до последних снапшотов 1.21+. Оптимизируем под вашу аудиторию." }
   ];
 
   return (
@@ -1138,7 +1138,7 @@ const Contact = () => {
               </div>
               <span className="text-xl font-bold tracking-tighter">BLOCKFORGE</span>
             </div>
-            <p className="text-gray-500 max-w-sm mb-12">Ваш надежный партнер в разработке уникальных игровых решений для Minecraft. Создаем будущее вместе.</p>
+            <p className="text-gray-500 max-w-sm mb-12">Профессиональная разработка для Minecraft. Создаем серверы, плагины и моды мирового уровня.</p>
             <div className="flex gap-4">
               {[Github, Twitter, MessageCircle].map((Icon, i) => (
                 <Button key={i} size="icon" variant="outline" className="rounded-xl border-white/10 hover:border-primary/50 hover:text-primary">
@@ -1173,10 +1173,10 @@ const Footer = () => {
   return (
     <footer className="py-12 border-t border-white/5 bg-black/60">
       <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-        <p className="text-gray-500 text-xs font-bold tracking-[0.2em] uppercase">© 2024 BLOCKFORGE STUDIO. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</p>
+        <p className="text-gray-500 text-xs font-bold tracking-[0.2em] uppercase">© 2026 BLOCKFORGE STUDIO. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</p>
         <div className="flex gap-12">
-          <a href="#" className="text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:text-primary transition-colors">Privacy Policy</a>
-          <a href="#" className="text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:text-primary transition-colors">Terms of Service</a>
+          <a href="#" className="text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:text-primary transition-colors">Политика конфиденциальности</a>
+          <a href="#" className="text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:text-primary transition-colors">Условия использования</a>
         </div>
       </div>
     </footer>
