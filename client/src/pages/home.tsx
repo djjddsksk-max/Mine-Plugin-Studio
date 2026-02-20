@@ -196,6 +196,7 @@ export default function Home() {
         <WorkProcess />
         <ProcessVisualization />
         <Portfolio />
+        <NewsSection />
         <PriceCalculator onOrder={(data) => {
           setCalculatorData(data);
           setIsOrderModalOpen(true);
@@ -218,7 +219,100 @@ export default function Home() {
       />
     </div>
   );
-}
+};
+
+const NewsSection = () => {
+  const news = [
+    {
+      title: "Поддержка Minecraft 1.21",
+      date: "15 фев 2026",
+      description: "Полная совместимость всех наших плагинов и модов с последней версией игры. Оптимизация производительности и новые API.",
+      image: "linear-gradient(135deg, #39ff14 0%, #000 100%)",
+      icon: <Box className="w-8 h-8 text-primary" />
+    },
+    {
+      title: "Новый тариф 'Корпоративный'",
+      date: "10 фев 2026",
+      description: "Эксклюзивные условия для крупных игровых сетей: персональный менеджер, SLA 99.9% и приоритетная разработка.",
+      image: "linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%)",
+      icon: <Server className="w-8 h-8 text-blue-400" />
+    },
+    {
+      title: "Интеграция с Discord API",
+      date: "5 фев 2026",
+      description: "Улучшенная синхронизация игровых событий с вашим Discord-сервером. Новые возможности для автоматизации сообщества.",
+      image: "linear-gradient(135deg, #5865F2 0%, #000 100%)",
+      icon: <MessageCircle className="w-8 h-8 text-[#5865F2]" />
+    }
+  ];
+
+  return (
+    <section className="py-32 bg-[#050505] relative overflow-hidden">
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
+          <div>
+            <Badge className="bg-primary/10 text-primary border-primary/20 mb-6 px-6 py-2 text-sm rounded-xl tracking-widest uppercase">Новости</Badge>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase">Последние обновления</h2>
+          </div>
+          <p className="text-gray-400 text-lg max-w-md text-right">Следите за развитием UnoStudio и нашими техническими достижениями</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {news.map((item, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              className="group"
+            >
+              <Card className="bg-[#0a0a0a] border-white/5 overflow-hidden hover:border-primary/30 transition-all duration-500 h-full flex flex-col hover-elevate">
+                <div 
+                  className="h-48 w-full relative overflow-hidden flex items-center justify-center"
+                  style={{ background: item.image }}
+                >
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
+                  <motion.div 
+                    initial={{ scale: 1 }}
+                    whileHover={{ scale: 1.2, rotate: 5 }}
+                    className="relative z-10 p-6 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10"
+                  >
+                    {item.icon}
+                  </motion.div>
+                </div>
+                
+                <CardContent className="p-8 flex-1 flex flex-col">
+                  <div className="flex items-center gap-2 text-primary/60 text-xs font-bold uppercase tracking-widest mb-4">
+                    <Clock className="w-3 h-3" />
+                    {item.date}
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors line-clamp-1">
+                    {item.title}
+                  </h3>
+                  
+                  <p className="text-gray-400 mb-8 line-clamp-2 text-sm leading-relaxed">
+                    {item.description}
+                  </p>
+                  
+                  <div className="mt-auto">
+                    <Button 
+                      variant="outline" 
+                      className="w-full border-white/10 hover:border-primary hover:text-primary transition-all group/btn"
+                    >
+                      Читать <ChevronRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const PriceCalculator = ({ onOrder }: { onOrder: (data: any) => void }) => {
   const [type, setType] = useState("plugin");
