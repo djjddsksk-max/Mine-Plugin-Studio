@@ -16,29 +16,25 @@ export function MusicPlayer() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
-      // Auto-play attempt after 1s delay
-      if (audioRef.current) {
-        audioRef.current.volume = volume;
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => setIsPlaying(true))
-            .catch(() => {
-              console.log("Autoplay blocked by browser");
-            });
-        }
-      }
     }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    if (audioRef.current) {
+    if (audioRef.current && isVisible) {
       audioRef.current.volume = volume;
-      localStorage.setItem("music-volume", volume.toString());
     }
-  }, [volume]);
+  }, [isVisible, volume]);
+
+  const handleVolumeChange = (val: number[]) => {
+    const newVolume = val[0] / 100;
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume;
+    }
+    localStorage.setItem("music-volume", newVolume.toString());
+  };
 
   const togglePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -53,6 +49,12 @@ export function MusicPlayer() {
   };
 
   const toggleExpand = () => {
+    // Auto-start music on first interaction
+    if (!isPlaying && audioRef.current && !isExpanded) {
+      audioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => console.log("Play failed:", err));
+    }
     setIsExpanded(!isExpanded);
   };
 
@@ -63,6 +65,8 @@ export function MusicPlayer() {
         src="/music/background.mp3"
         loop
         preload="auto"
+        onError={(e) => console.error("Audio error:", e)}
+        onLoadedData={() => console.log("Audio loaded")}
       />
       
       <AnimatePresence>
@@ -76,23 +80,19 @@ export function MusicPlayer() {
             onClick={toggleExpand}
           >
             <motion.div
-              layout
-              transition={{
-                layout: { duration: 0.3, type: "spring", stiffness: 200, damping: 25 }
-              }}
-              className="bg-black/80 backdrop-blur-xl border border-white/10 shadow-[0_0_30px_rgba(57,255,20,0.2)] overflow-hidden flex items-center px-4"
-              style={{
+              animate={{
                 borderRadius: isExpanded ? "24px" : "999px",
                 width: isExpanded ? "320px" : "60px",
                 height: isExpanded ? "80px" : "32px",
               }}
+              transition={{ duration: 0.3, type: "spring", stiffness: 200, damping: 25 }}
+              className="bg-black/80 backdrop-blur-xl border border-white/10 shadow-[0_0_30px_rgba(57,255,20,0.2)] overflow-hidden flex items-center px-4"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               {!isExpanded ? (
                 <motion.div 
                   className="w-full flex justify-center items-center"
-                  layoutId="icon"
                 >
                   <Music 
                     className={`w-4 h-4 text-primary ${isPlaying ? "animate-pulse" : ""}`} 
@@ -106,7 +106,7 @@ export function MusicPlayer() {
                 >
                   <div className="flex items-center justify-between pointer-events-auto">
                     <div className="flex items-center gap-3 overflow-hidden select-none">
-                      <motion.div layoutId="icon">
+                      <motion.div>
                         <Music className={`w-5 h-5 text-primary ${isPlaying ? "animate-pulse" : ""}`} />
                       </motion.div>
                       <div className="flex flex-col overflow-hidden">
@@ -143,7 +143,7 @@ export function MusicPlayer() {
                       value={[volume * 100]}
                       max={100}
                       step={1}
-                      onValueChange={(val) => setVolume(val[0] / 100)}
+                      onValueChange={handleVolumeChange}
                       onPointerDown={(e) => e.stopPropagation()}
                       className="w-full cursor-pointer [&_[role=slider]]:bg-primary [&_[role=slider]]:border-none"
                     />
