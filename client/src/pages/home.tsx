@@ -186,25 +186,39 @@ export default function Home() {
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-primary z-[200] shadow-[0_0_20px_#39ff14]" style={{ scaleX }} />
       <Navbar onOpenOrder={() => setIsOrderModalOpen(true)} />
       <main>
-        <Hero onOpenOrder={() => setIsOrderModalOpen(true)} />
+        <section id="hero">
+          <Hero onOpenOrder={() => setIsOrderModalOpen(true)} />
+        </section>
         <Stats />
-        <ResultsSection />
+        <section id="results">
+          <ResultsSection />
+        </section>
         <GeographySection />
         <Achievements />
-        <Services />
+        <section id="services">
+          <Services />
+        </section>
         <TechSection />
         <WorkProcess />
         <ProcessVisualization />
-        <Portfolio />
-        <NewsSection />
+        <section id="portfolio">
+          <Portfolio />
+        </section>
+        <section id="news">
+          <NewsSection />
+        </section>
         <PriceCalculator onOrder={(data) => {
           setCalculatorData(data);
           setIsOrderModalOpen(true);
         }} />
-        <Pricing onOpenOrder={() => setIsOrderModalOpen(true)} />
+        <section id="pricing">
+          <Pricing onOpenOrder={() => setIsOrderModalOpen(true)} />
+        </section>
         <Team />
         <Reviews />
-        <FAQ />
+        <section id="faq">
+          <FAQ />
+        </section>
         <CTA onOpenOrder={() => setIsOrderModalOpen(true)} />
       </main>
       <Footer />
@@ -757,18 +771,73 @@ const TechSection = () => {
 const Navbar = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
+
+  const navItems = [
+    { name: "Услуги", id: "services" },
+    { name: "Результаты", id: "results" },
+    { name: "Портфолио", id: "portfolio" },
+    { name: "Новости", id: "news" },
+    { name: "Цены", id: "pricing" },
+    { name: "FAQ", id: "faq" },
+  ];
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -70% 0px",
+      threshold: 0,
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    navItems.forEach((item) => {
+      const element = document.getElementById(item.id);
+      if (element) observer.observe(element);
+    });
+
+    // Special case for hero
+    const heroElement = document.getElementById("hero");
+    if (heroElement) observer.observe(heroElement);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+    };
   }, []);
+
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+    setMobileMenuOpen(false);
+  };
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ${scrolled ? "bg-black/40 backdrop-blur-2xl border-b border-white/5 py-3" : "bg-transparent py-8"}`}>
       <div className="container mx-auto px-6 flex items-center justify-between">
         <motion.div 
           whileHover={{ scale: 1.05 }}
+          onClick={(e) => scrollToSection(e as any, "hero")}
           className="flex items-center gap-4 group cursor-pointer"
         >
           <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center transform group-hover:rotate-[360deg] transition-transform duration-1000 shadow-[0_0_30px_rgba(57,255,20,0.3)]">
@@ -777,20 +846,36 @@ const Navbar = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
           <span className="text-2xl font-bold font-display tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Uno<span className="text-primary">Studio</span></span>
         </motion.div>
 
-        <div className="hidden md:flex items-center gap-6">
-          {["Услуги", "Портфолио", "Цены", "Команда"].map((item) => (
-            <motion.a 
-              key={item}
-              href={`#${item === "Услуги" ? "services" : item === "Портфолио" ? "portfolio" : item === "Цены" ? "pricing" : "team"}`}
-              whileHover={{ y: -2, color: "#39ff14" }}
-              className="text-xs uppercase tracking-[0.3em] font-bold text-gray-400 transition-colors"
-            >
-              {item}
-            </motion.a>
+        <div className="hidden md:flex items-center gap-8">
+          {navItems.map((item) => (
+            <div key={item.id} className="flex flex-col items-center">
+              <motion.a 
+                href={`#${item.id}`}
+                onClick={(e) => scrollToSection(e, item.id)}
+                className={`text-[10px] uppercase tracking-[0.3em] font-bold transition-all duration-500 relative py-2 ${activeSection === item.id ? "text-primary" : "text-gray-400 hover:text-white"}`}
+              >
+                {item.name}
+                {activeSection === item.id && (
+                  <motion.div 
+                    layoutId="nav-underline"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary shadow-[0_0_10px_#39ff14]"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </motion.a>
+              <motion.div 
+                animate={{ 
+                  scale: activeSection === item.id ? 1.5 : 1,
+                  opacity: activeSection === item.id ? 1 : 0.3,
+                  backgroundColor: activeSection === item.id ? "#39ff14" : "#9ca3af"
+                }}
+                className="w-1 h-1 rounded-full mt-1"
+              />
+            </div>
           ))}
           <Button 
             onClick={onOpenOrder}
-            className="bg-primary text-black hover:bg-white font-bold px-10 h-14 rounded-2xl transition-all shadow-[0_10px_30px_-10px_rgba(57,255,20,0.5)] active:scale-95 group"
+            className="bg-primary text-black hover:bg-white font-bold px-10 h-14 rounded-2xl transition-all shadow-[0_10px_30px_-10px_rgba(57,255,20,0.5)] active:scale-95 group ml-4"
           >
             ОБСУДИТЬ ПРОЕКТ <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
           </Button>
@@ -810,15 +895,22 @@ const Navbar = ({ onOpenOrder }: { onOpenOrder: () => void }) => {
             className="md:hidden fixed inset-0 bg-black/95 backdrop-blur-3xl z-[200] flex flex-col items-center justify-center gap-12"
           >
              <button className="absolute top-8 right-8 text-primary" onClick={() => setMobileMenuOpen(false)}><X size={40} /></button>
-             {["Услуги", "Портфолио", "Цены", "Команда"].map(item => (
-               <a key={item} href={`#${item === "Услуги" ? "services" : item === "Портфолио" ? "portfolio" : item === "Цены" ? "pricing" : "team"}`} className="text-4xl font-bold tracking-tighter" onClick={() => setMobileMenuOpen(false)}>{item}</a>
+             {navItems.map(item => (
+               <a 
+                key={item.id} 
+                href={`#${item.id}`} 
+                className={`text-4xl font-bold tracking-tighter transition-colors ${activeSection === item.id ? "text-primary" : "text-white"}`}
+                onClick={(e) => scrollToSection(e, item.id)}
+               >
+                 {item.name}
+               </a>
              ))}
              <Button 
                onClick={() => {
                  setMobileMenuOpen(false);
                  onOpenOrder();
                }}
-               className="w-64 bg-primary text-black font-bold text-2xl py-10 rounded-3xl"
+               className="w-64 bg-primary text-black font-bold text-2xl py-10 rounded-3xl mt-8"
              >
                СВЯЗАТЬСЯ
              </Button>
